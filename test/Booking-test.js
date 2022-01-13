@@ -6,16 +6,20 @@ const getRandomIndex = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-describe("Room", () => {
+describe("Booking", () => {
   let booking;
 
   beforeEach(() => {
-    booking = new Room(getRandomIndex(bookingTestData));
+    booking = new Booking(getRandomIndex(bookingTestData));
+  });
+
+  it('should be an instance of Booking', () => {
+    expect(booking).to.be.an.instanceOf(Booking);
   });
 
   it('should have a random string as a booking id', () => {
-    expect(booking.id).to.be.a('string');
-    expect(booking.id.length).to.be(17);
+    expect(booking.id).to.be.a('string')
+    expect(booking.id.length).to.deep.equal(17);
   });
 
   it('should keep track of the id of the user who booking the room', () => {
@@ -25,7 +29,7 @@ describe("Room", () => {
 
   it('should should have a date associated with the booking', () => {
     expect(booking.date).to.be.a('string');
-    expect(booking.date.length).to.be(10);
+    expect(booking.date.length).to.deep.equal(10);
   });
 
   it('should have a room number associated with the booking', () => {
