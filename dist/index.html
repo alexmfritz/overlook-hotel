@@ -1,16 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
-</head>
-<body>
-  <img src="./images/turing-logo.png" alt="turing logo">
-  
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
-  <script src="bundle.js"></script>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpack Starter Kit</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav>
+          <h1 class="nav-title">OVERLOOK HOTEL</h1>
+          <div class="nav-user-info hidden">
+            <h2 id="userName">Alex Fritz</h2>
+            <h3 id="userId">USER ID: 9382</h3>
+          </div>
+        </nav>
+      </header>
 
-</body>
+      <section class="login-display hidden" id="loginDisplay">
+        <section class="login-information">
+          <h3>Outlook Hotel Login Page</h3>
+          <section class="login-input-field">
+            <section class="login-input-row">
+              <label for="loginUsername">Username</label>
+              <input type="text" class="login-username-input" placeholder="ex: username50" id="loginUsername">
+            </section>
+            <section class="login-input-row">
+              <label for="loginPassword">Password</label>
+              <input type="text" class="login-password-input" placeholder="ex: password50" id="loginPassword">
+            </section>
+          </section>
+          <button class="login-button">Login</button>
+        </section>
+      </section>
+
+      <section class="customer-display" id="customerDisplay">
+        <section class="customer-button-row">
+          <button class="button-tab" id="customerNewBookingsButton">Book New</button>
+          <button class="button-tab" id="customerUpcomingBookingsButton">Upcoming Bookings</button>
+          <button class="button-tab" id="customerCurrentBookingsButton">Current Bookings</button>
+          <button class="button-tab" id="customerPastBookingsButton">Past Bookings</button>
+          <button class="button-tab" id="customerBillingInfoButton">Total Bill</button>
+        </section>
+        <section class="customer-information" id="customerInfo">
+          <section class="customer-new-bookings-date">
+            <section class="customer-date-input-wrapper">
+              <label for="customerDateInput">Pick a date:</label>
+              <input class="customer-date-input" id="customerDateInput" type="date" min="2022-01-01" max="2025-12-31">
+              <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Rooms</button>
+            </section>
+          </section>
+          <section class="customer-new-bookings-wrapper">
+            <button class="customer-small-room-info">
+              <p>Residential Suite</p>
+              <p>$358.40/night</p>
+            </button>
+            
+          </section>         
+          <section class="customer-new-bookings-wrapper">
+            <h2 class="customer-single-booking-title">Room 1: Residential Suite</h2>
+            <section class="customer-single-booking-info">
+              <h3>Features: 1 Queen Bed</h3>
+              <h3>Amenities: Bidet</h3>
+              <h3>Price: $358.4</h3>
+            </section>
+            <section class="customer-single-booking-submit">
+              <button class="customer-book-room-button">BOOK ROOM</button>
+              <p>You have successfully booked Room 1 for the date: 02/22/2022!</p>
+            </section>
+          </section>
+        </section>
+      </section>
+
+      <section class="manager-display hidden" id="managerDisplay">
+        <section class="manager-button-row">
+          <button class="button-tab" id="managerAvailabilityButton">Currently Available</button>
+          <button class="button-tab" id="managerUpcomingBookingsButton">Upcoming Bookings</button>
+          <button class="button-tab" id="managerCurrentBookingsButton">Current Bookings</button>
+        </section>
+        <section class="manager-information" id="managerInfo">
+
+        </section>
+      </section>
+
+    </main>
+    <script src="bundle.js"></script>
+  </body>
 </html>
