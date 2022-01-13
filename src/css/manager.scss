@@ -1,0 +1,5 @@
+.manager-button-row {
+  display: flex;
+  background: none;
+  @include height-width("", 60%);
+}

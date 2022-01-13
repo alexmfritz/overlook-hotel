@@ -1,0 +1,26 @@
+header {
+  @include height-width(15%);
+  background-color: $redrum;
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @include height-width(100%);
+    @include right-left-pad(20px, 20px);
+    
+  }
+}
+
+.nav-title {
+  font-size: 50px;
+  -webkit-animation: bounce 1.2s both;
+  animation: bounce 1.2s both;
+}
+
+.nav-user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 30px;
+}

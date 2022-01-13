@@ -1,0 +1,101 @@
+.customer-button-row {
+  display: flex;
+  @include height-width("", 100%);
+}
+
+.customer-information {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.customer-new-bookings-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @include height-width(80%, 15%);
+}
+
+.customer-new-bookings-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  @include height-width(80%, 40%);
+  border: 1px solid $blackrum;
+}
+
+.customer-new-bookings-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.customer-small-room-info {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background: none;
+  border: 1px solid $blackrum;
+  border-radius: 5px;
+  min-height: 85px;
+  @include height-width(85px, 90%);
+  @include top-bot-marg(8px, 8px);
+}
+
+.customer-small-room-info:hover {
+  background-color: $redrum-hover;
+}
+
+.customer-small-room-info > p {
+  font-size: 16px;
+}
+
+.customer-date-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  @include height-width(100px, 90%);
+}
+
+.customer-date-input {
+  color: $blackrum;
+}
+
+.customer-date-search-button {
+  font-size: 14px;
+  color: $blackrum;
+  @include height-width(25px, 100%);
+  @include button-tabs($whiterum);
+}
+
+.customer-date-search-button:hover {
+  background-color: $pinkrum;
+}
+
+.customer-single-booking-title {
+  font-size: 32px;
+  text-align: center;
+  @include height-width(20%, 100%);
+}
+
+.customer-single-booking-info,
+.customer-single-booking-submit {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  @include height-width(40%, 100%);
+  @include right-left-pad("", 50px);
+}
+
+.customer-book-room-button {
+  font-size: 14px;
+  color: $blackrum;
+  @include height-width(25px, 30%);
+  @include button-tabs($whiterum);
+}
+
+.customer-book-room-button:hover {
+  background-color: $pinkrum;
+}
