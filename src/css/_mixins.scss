@@ -1,0 +1,22 @@
+@import '_variables';
+
+@mixin height-width($height:"", $width:"") {
+  height: $height;
+  width: $width;
+}
+
+@mixin button-tabs($color) {
+  background-color: $color;
+  border-radius: 3px;
+  border: 1px solid $blackrum;
+}
+
+@mixin right-left-pad($right:"", $left:"") {
+  padding-right: $right;
+  padding-left: $left;
+}
+
+@mixin top-bot-marg($top:"", $bottom:"") {
+  margin-top: $top;
+  margin-bottom: $bottom;
+}
