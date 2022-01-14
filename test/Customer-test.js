@@ -41,6 +41,7 @@ describe('Customer', () => {
   });
 
   it('should have a list of bookings if user has made a booking', () => {
+    customerTwo.getCustomerBookings(bookings);
     expect(customerTwo.bookings.length).to.deep.equal(1);
     expect(customerTwo.bookings).to.deep.equal([bookings[0]]);
   });
@@ -50,10 +51,14 @@ describe('Customer', () => {
   });
 
   it('should have a default amount of 0 if no bookings have been made', () => {
+    customerOne.getCustomerBookings(bookings);
+    customerOne.getTotalCustomerAmountSpent(rooms);
     expect(customerOne.totalSpent).to.deep.equal(0);
   });
 
   it('should calculate the amount spent on their bookings if they have made any', () => {
+    customerTwo.getCustomerBookings(bookings);
+    customerTwo.getTotalCustomerAmountSpent(rooms);
     expect(customerTwo.totalSpent).to.deep.equal(231.46);
   });
-})
+});
