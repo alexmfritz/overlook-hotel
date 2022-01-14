@@ -3,18 +3,18 @@ const fetchData = (api) => {
   .then(response => response.json());
 }
 
-export default allCustomersData = fetchData('customer');
-export default allBookingsData = fetchData('bookings');
-export default allRoomsData = fetchData('rooms');
+const allCustomersData = fetchData('customer');
+const allBookingsData = fetchData('bookings');
+const allRoomsData = fetchData('rooms');
 
-export default fetchSingleCustomer = (id) => {
+const fetchSingleCustomer = (id) => {
   fetch(`http://localhost:3001/api/v1/customers/${id}`)
   .then(response => response.json())
   .then(data => data)
   .catch(error => console.log(error))
 }
 
-export default postNewBooking = (bookingObj) => {
+const postNewBooking = (bookingObj) => {
   return fetch('http://localhost:3001/api/v1/bookings', {
     method: 'POST',
     body: JSON.stringify(bookingObj),
@@ -31,7 +31,7 @@ export default postNewBooking = (bookingObj) => {
   })
 }
 
-export default deleteSingleBooking = (bookingID) => {
+const deleteSingleBooking = (bookingID) => {
   fetch(`http://localhost:3001/api/v1/bookings/${bookingID}`, {
     method: 'DELETE',
     headers: {
@@ -39,6 +39,15 @@ export default deleteSingleBooking = (bookingID) => {
     }
   })
 }
+
+module.exports = { 
+  allCustomersData, 
+  allBookingsData, 
+  allRoomsData, 
+  fetchSingleCustomer, 
+  postNewBooking, 
+  deleteSingleBooking 
+};
 
 // export default fetchAllCustomer = () => {
 //   fetch('http://localhost:3001/api/v1/customers')
