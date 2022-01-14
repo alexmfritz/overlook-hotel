@@ -49,7 +49,7 @@ describe('Hotel', () => {
   });
 
   it('should be able to determine the percentage of occupied rooms', () => {
-    let occupied = hotel.calculateTotalOccupied('2022/01/10');
+    let occupied = hotel.calculateTotalOccupancy('2022/01/10');
     expect(occupied).to.deep.equal('62.50%');
   });
 

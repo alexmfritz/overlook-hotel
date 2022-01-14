@@ -22,7 +22,7 @@ export default class Hotel {
     return this.availableRooms.filter(room => room.roomType === type);
   }
 
-  calculateTotalOccupied(date) {
+  calculateTotalOccupancy(date) {
     this.filterAllAvailableRooms(date);
     let percent = (1 - (this.availableRooms.length / this.rooms.length)) * 100;
     return `${percent.toFixed(2)}%`
