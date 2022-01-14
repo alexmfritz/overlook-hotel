@@ -15,7 +15,7 @@ describe('Customer', () => {
   beforeEach(() => {
     rooms = roomTestData.map(room => new Room(room));
     bookings = bookingTestData.map(booking => new Booking(booking));
-    customerOne = new Customer(customerTestData[0], bookings, rooms);
+    customerOne = new Customer(customerTestData[1], bookings, rooms);
     customerTwo = new Customer(customerTestData[5], bookings, rooms)
   })
 
@@ -54,6 +54,6 @@ describe('Customer', () => {
   });
 
   it('should calculate the amount spent on their bookings if they have made any', () => {
-    expect(customerTwo.totalSpent).to.deep.equal(294.56);
+    expect(customerTwo.totalSpent).to.deep.equal(231.46);
   });
 })
