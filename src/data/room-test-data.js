@@ -38,5 +38,13 @@ module.exports = [
     "bedSize": "queen",
     "numBeds": 2,
     "costPerNight": 340.17
+  },
+  {
+    "number": 15,
+    "roomType": "residential suite",
+    "bidet": false,
+    "bedSize": "full",
+    "numBeds": 1,
+    "costPerNight": 294.56
   }
 ];
