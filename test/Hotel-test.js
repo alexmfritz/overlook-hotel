@@ -48,13 +48,13 @@ describe('Hotel', () => {
     expect(residentialSuites).to.deep.equal([rooms[0]]);
   });
 
-  it('should be able to determine the percentage of occupied rooms', () => {
-    let occupied = hotel.calculateTotalOccupancy('2022/01/10');
-    expect(occupied).to.deep.equal('62.50%');
-  });
+  // it('should be able to determine the percentage of occupied rooms', () => {
+  //   let occupied = hotel.calculateTotalOccupancy('2022/01/10');
+  //   expect(occupied).to.deep.equal('62.50%');
+  // });
 
-  it('should be able to calculate the total revenue for a chosen day', () => {
-    let totalRevenue = hotel.calculateTotalRevenue('2022/01/10');
-    expect(totalRevenue).to.deep.equal('$1740.59');
-  });
+  // it('should be able to calculate the total revenue for a chosen day', () => {
+  //   let totalRevenue = hotel.calculateTotalRevenue('2022/01/10');
+  //   expect(totalRevenue).to.deep.equal('$1740.59');
+  // });
 })
