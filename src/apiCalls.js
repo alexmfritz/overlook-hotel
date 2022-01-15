@@ -1,20 +1,23 @@
-const fetchData = (api) => {
-  fetch(`http://localhost:3001/api/v1/${api}`)
-  .then(response => response.json());
+import { checkForError } from './scripts';
+
+
+function fetchData(api) {
+  return fetch(`http://localhost:3001/api/v1/${api}`)
+  .then(response => checkForError(response))
 }
 
-const allCustomersData = fetchData('customer');
+const allCustomersData = fetchData('customers');
 const allBookingsData = fetchData('bookings');
 const allRoomsData = fetchData('rooms');
 
-const fetchSingleCustomer = (id) => {
+function fetchSingleCustomer(id) {
   fetch(`http://localhost:3001/api/v1/customers/${id}`)
   .then(response => response.json())
   .then(data => data)
   .catch(error => console.log(error))
 }
 
-const postNewBooking = (bookingObj) => {
+function postNewBooking(bookingObj) {
   return fetch('http://localhost:3001/api/v1/bookings', {
     method: 'POST',
     body: JSON.stringify(bookingObj),
@@ -31,22 +34,12 @@ const postNewBooking = (bookingObj) => {
   })
 }
 
-const deleteSingleBooking = (bookingID) => {
-  fetch(`http://localhost:3001/api/v1/bookings/${bookingID}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
-
-module.exports = { 
+export { 
   allCustomersData, 
   allBookingsData, 
   allRoomsData, 
   fetchSingleCustomer, 
-  postNewBooking, 
-  deleteSingleBooking 
+  postNewBooking,
 };
 
 // export default fetchAllCustomer = () => {
