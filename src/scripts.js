@@ -6,7 +6,10 @@ import {
   fetchSingleCustomer, 
   postNewBooking,
 } from './apiCalls';
-import { domUpdates, querySelectors } from './domUpdates';
+import { 
+  domUpdates, 
+  querySelectors
+} from './domUpdates';
 import Room from './classes/Room';
 import Booking from './classes/Booking';
 import Customer from './classes/Customer';
@@ -19,8 +22,14 @@ let customer;
 let hotel;
 
 function getAllData() {
-  return Promise.all([allRoomsData, allBookingsData, allCustomersData]).then(data => loadAllData(data))
+  return Promise.all([allRoomsData, allBookingsData, allCustomersData])
+  .then(data => loadAllData(data))
   .catch(error => displayFetchErrorMessage(error));
+}
+
+function getSingleCustomerData(userID) {
+  let singleCustomerFetch = fetchSingleCustomer(userID);
+  return Promise.resolve(singleCustomerFetch);
 }
 
 function createAllRoomsData(roomsData) {
@@ -33,6 +42,11 @@ function createAllBookingsData(bookingsData) {
 
 function createAllCustomersData(customersData) {
   allCustomers = customersData.map(customer => new Customer(customer));
+}
+
+function createNewSingleUser(singleCustomer) {
+  customer = new Customer(singleCustomer);
+  domUpdates.showUserInfo();
 }
 
 function getAllRoomsData(data) {
@@ -73,33 +87,32 @@ function displayFetchErrorMessage(error) {
 }
 
 function validateUserCredentials() {
+  let loginUsername = document.getElementById('loginUsername');
+  let loginPassword = document.getElementById('loginPassword');
+  let userID = loginUsername.value.substring(8, 10);
   getAllData()
   .then(data => {
-    let loginUsername = document.getElementById('loginUsername');
-    let loginPassword = document.getElementById('loginPassword');
-    let username = loginUsername.value.substring(0, 8);
-    let userID = loginUsername.value.substring(8, 10);
-    let test = testCredentials(userID);
-    if ((username !== 'username') || (!test.length) || (loginPassword.value !== 'overlook22')) {
+    if (!validateUsername(loginUsername) || (loginPassword.value !== 'overlook2022')) {
       querySelectors.loginErrorMessage.innerText = "Please enter the correct credentials!";
     } else {
       domUpdates.showUserDashboard();
-    }
-    })
+      getSingleCustomerData(userID)
+      .then(data => createNewSingleUser(data))
+      .catch(error => displayFetchErrorMessage(error))
+      }
+  });
 }
 
-
-function testCredentials(userID) {
-  let newArr = [];
-  allCustomers.forEach(customer => {
-    if (`username${customer.id}` === `username${parseInt(userID)}`) {
-      newArr.push(customer);
-    }
-  })
-  return newArr;
+function validateUsername(usernameInput) {
+  return allCustomers.find(customer => customer.username === usernameInput.value) ? true : false;
 }
 
 export { 
+  customer,
+  allCustomers,
+  allBookings,
+  allRooms,
+  hotel,
   validateUserCredentials,
   checkForError,
   getAllData
