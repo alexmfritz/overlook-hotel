@@ -15,27 +15,23 @@ import Hotel from './classes/Hotel';
 let allRooms;
 let allBookings;
 let allCustomers;
+let customer;
 let hotel;
 
 function getAllData() {
-  Promise.all([allRoomsData, allBookingsData, allCustomersData]).then(data =>{
-    loadAllData(data)
-  }).catch(error => displayFetchErrorMessage(error));
+  return Promise.all([allRoomsData, allBookingsData, allCustomersData]).then(data => loadAllData(data))
+  .catch(error => displayFetchErrorMessage(error));
 }
 
-function getAllBookingsData(data) {
-  createAllBookingsData(data[1].bookings);
+function createAllRoomsData(roomsData) {
+  allRooms = roomsData.map(room => new Room(room));
 }
 
 function createAllBookingsData(bookingsData) {
   allBookings = bookingsData.map(booking => new Booking(booking));
 }
 
-function getAllCustomerData(data) {
-  createAllCustomerData(data[2].customers);
-}
-
-function createAllCustomerData(customersData) {
+function createAllCustomersData(customersData) {
   allCustomers = customersData.map(customer => new Customer(customer));
 }
 
@@ -43,17 +39,19 @@ function getAllRoomsData(data) {
   createAllRoomsData(data[0].rooms);
 }
 
-function createAllRoomsData(roomsData) {
-  allRooms = roomsData.map(room => new Room(room));
+function getAllBookingsData(data) {
+  createAllBookingsData(data[1].bookings);
+}
+
+function getAllCustomersData(data) {
+  createAllCustomersData(data[2].customers);
 }
 
 function loadAllData(data) {
   getAllRoomsData(data);
   getAllBookingsData(data);
-  getAllCustomerData(data);
+  getAllCustomersData(data);
   hotel = new Hotel(allRooms, allBookings);
-  console.log(hotel);
-  console.log(allCustomers);
 }
 
 function checkForError(response) {
@@ -75,20 +73,34 @@ function displayFetchErrorMessage(error) {
 }
 
 function validateUserCredentials() {
-  let loginUsername = document.getElementById('loginUsername');
-  let loginPassword = document.getElementById('loginPassword');
-  if (loginUsername.value !== 'username2022' && loginPassword !== 'overlook2022') {
-    querySelectors.loginErrorMessage.innerText = "Please enter the correct credentials!";
-  } else {
-    // let userID = loginUsername.value.substring(10, 12);
-    // console.log(userID);
-    domUpdates.showUserDashboard();
-    getAllData();
-  }
+  getAllData()
+  .then(data => {
+    let loginUsername = document.getElementById('loginUsername');
+    let loginPassword = document.getElementById('loginPassword');
+    let username = loginUsername.value.substring(0, 8);
+    let userID = loginUsername.value.substring(8, 10);
+    let test = testCredentials(userID);
+    if ((username !== 'username') || (!test.length) || (loginPassword.value !== 'overlook22')) {
+      querySelectors.loginErrorMessage.innerText = "Please enter the correct credentials!";
+    } else {
+      domUpdates.showUserDashboard();
+    }
+    })
 }
 
 
+function testCredentials(userID) {
+  let newArr = [];
+  allCustomers.forEach(customer => {
+    if (`username${customer.id}` === `username${parseInt(userID)}`) {
+      newArr.push(customer);
+    }
+  })
+  return newArr;
+}
+
 export { 
   validateUserCredentials,
-  checkForError
+  checkForError,
+  getAllData
 };

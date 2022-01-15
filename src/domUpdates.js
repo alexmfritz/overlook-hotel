@@ -1,4 +1,7 @@
-import { validateUserCredentials } from "./scripts";
+import { 
+  validateUserCredentials,
+  getAllData
+} from "./scripts";
 
 const loginButton = document.getElementById('loginButton');
 const loginDisplay = document.getElementById('loginDisplay');
@@ -32,5 +35,8 @@ const querySelectors = {
 
 loginButton.addEventListener('click', validateUserCredentials);
 
-export { domUpdates, querySelectors };
+export { 
+  domUpdates, 
+  querySelectors 
+};
 

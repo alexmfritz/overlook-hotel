@@ -12,7 +12,7 @@ const allRoomsData = fetchData('rooms');
 
 function fetchSingleCustomer(id) {
   fetch(`http://localhost:3001/api/v1/customers/${id}`)
-  .then(response => response.json())
+  .then(response => checkForError(response))
   .then(data => data)
   .catch(error => console.log(error))
 }
