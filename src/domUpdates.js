@@ -33,8 +33,10 @@ const querySelectors = {
   customerInfo
 };
 
-// window.addEventListener('load', getAllData);
 loginButton.addEventListener('click', validateUserCredentials);
 
-export { domUpdates, querySelectors };
+export { 
+  domUpdates, 
+  querySelectors 
+};
 
