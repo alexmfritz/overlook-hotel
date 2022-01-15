@@ -32,14 +32,19 @@ const domUpdates = {
   showUserDashboard() {
     domUpdates.addClass([loginDisplay], 'hidden');
     domUpdates.removeClass([customerDisplay], 'hidden');
-    console.log(customer)
   },
 
   showUserInfo() {
-    console.log(customer)
     domUpdates.removeClass([navUserInfo], 'hidden');
     domUpdates.updateInnerText(usernameDisplay, `Username: ${customer.name}`);
     domUpdates.updateInnerText(userIdDisplay, `User ID: ${customer.id}`);
+  },
+
+  invalidLoginMessage() {
+    domUpdates.updateInnerText(querySelectors.loginErrorMessage, "Please enter the correct credentials!");
+    setTimeout(() => {
+      domUpdates.updateInnerText(querySelectors.loginErrorMessage, "");
+    }, 1500);
   }
 };
 
