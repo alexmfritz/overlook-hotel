@@ -6,7 +6,6 @@
 @import 'header';
 @import 'login';
 @import 'customer';
-@import 'manager';
 
 * {
   color: $whiterum;
@@ -43,7 +42,7 @@ main {
 
 .button-tab {
   font-size: 18px;
-  @include height-width(50px, 30%);
+  @include height-width(50px, 20%);
   @include button-tabs($redrum);
 }
 
@@ -57,7 +56,6 @@ main {
 }
 
 .customer-information,
-.manager-information,
 .login-information {
   background: $redrum;
   @include height-width(100%, 100%);
