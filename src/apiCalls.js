@@ -3,7 +3,7 @@ const fetchData = (api) => {
   .then(response => response.json());
 }
 
-const allCustomersData = fetchData('customer');
+const allCustomersData = fetchData('customers');
 const allBookingsData = fetchData('bookings');
 const allRoomsData = fetchData('rooms');
 
@@ -31,22 +31,12 @@ const postNewBooking = (bookingObj) => {
   })
 }
 
-const deleteSingleBooking = (bookingID) => {
-  fetch(`http://localhost:3001/api/v1/bookings/${bookingID}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
-
 module.exports = { 
   allCustomersData, 
   allBookingsData, 
   allRoomsData, 
   fetchSingleCustomer, 
-  postNewBooking, 
-  deleteSingleBooking 
+  postNewBooking,
 };
 
 // export default fetchAllCustomer = () => {
