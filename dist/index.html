@@ -38,16 +38,17 @@
       <section class="customer-display" id="customerDisplay">
         <section class="customer-button-row">
           <button class="button-tab" id="customerNewBookingsButton">Book New</button>
-          <button class="button-tab" id="customerUpcomingBookingsButton">Upcoming Bookings</button>
           <button class="button-tab" id="customerCurrentBookingsButton">Current Bookings</button>
-          <button class="button-tab" id="customerPastBookingsButton">Past Bookings</button>
           <button class="button-tab" id="customerBillingInfoButton">Total Bill</button>
         </section>
         <section class="customer-information" id="customerInfo">
-          <section class="customer-new-bookings-date">
+          <h2 class="welcome-message">Welcome to your Dashboard!</h2>
+          <!-- <section class="customer-new-bookings-date">
             <section class="customer-date-input-wrapper">
               <label for="customerDateInput">Pick a date:</label>
               <input class="customer-date-input" id="customerDateInput" type="date" min="2022-01-01" max="2025-12-31">
+              <label for="customerTypeInput">Pick a room type:</label>
+              <input class="customer-date-input" id="customerTypeInput">
               <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Rooms</button>
             </section>
           </section>
@@ -69,21 +70,9 @@
               <button class="customer-book-room-button">BOOK ROOM</button>
               <p>You have successfully booked Room 1 for the date: 02/22/2022!</p>
             </section>
-          </section>
+          </section> -->
         </section>
       </section>
-
-      <section class="manager-display hidden" id="managerDisplay">
-        <section class="manager-button-row">
-          <button class="button-tab" id="managerAvailabilityButton">Currently Available</button>
-          <button class="button-tab" id="managerUpcomingBookingsButton">Upcoming Bookings</button>
-          <button class="button-tab" id="managerCurrentBookingsButton">Current Bookings</button>
-        </section>
-        <section class="manager-information" id="managerInfo">
-
-        </section>
-      </section>
-
     </main>
     <script src="bundle.js"></script>
   </body>

@@ -9,6 +9,12 @@
   align-items: center;
 }
 
+.welcome-message {
+  font-size: 50px;
+  -webkit-animation: welcome-message 3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+  animation: welcome-message 3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+}
+
 .customer-new-bookings-date {
   display: flex;
   flex-direction: column;
