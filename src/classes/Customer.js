@@ -27,7 +27,7 @@ export default class Customer {
   }
 
   createUsername() {
-    if (0 < this.id < 10) {
+    if (this.id < 10) {
       return `username0${this.id}`;
     } else {
       return `username${this.id}`;
