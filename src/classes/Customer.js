@@ -4,6 +4,8 @@ export default class Customer {
     this.name = customerObj.name;
     this.bookings =  [];
     this.totalSpent = 0;
+    this.username = this.createUsername();
+    this.password = `overlook2022`;
   }
 
   getCustomerBookings(bookings) {
@@ -22,5 +24,13 @@ export default class Customer {
       })
       return totalPrice;
     }, 0);
+  }
+
+  createUsername() {
+    if (0 < this.id < 10) {
+      return `username0${this.id}`;
+    } else {
+      return `username${this.id}`;
+    }
   }
 }

@@ -15,15 +15,15 @@ describe('Customer', () => {
   beforeEach(() => {
     rooms = roomTestData.map(room => new Room(room));
     bookings = bookingTestData.map(booking => new Booking(booking));
-    customerOne = new Customer(customerTestData[1], bookings, rooms);
-    customerTwo = new Customer(customerTestData[5], bookings, rooms)
+    customerOne = new Customer(customerTestData[1]);
+    customerTwo = new Customer(customerTestData[5]);
   })
 
   it('should be an instance of Customer', () => {
     expect(customerOne).to.be.an.instanceOf(Customer);
   });
 
-  it('shoulder have an id', () => {
+  it('should have an id', () => {
     expect(customerOne.id).to.be.a('number');
     expect(customerOne.id).to.be.greaterThan(0);
   });
@@ -61,4 +61,14 @@ describe('Customer', () => {
     customerTwo.getTotalCustomerAmountSpent(rooms);
     expect(customerTwo.totalSpent).to.deep.equal(231.46);
   });
+
+  it('should have a username unique to the id of the user', () => {
+    expect(customerOne.username).to.be.a('string');
+    expect(customerOne.username).to.deep.equal('username02')
+  });
+
+  it('should have a password associated with the user account', () => {
+    expect(customerOne.password).to.be.a('string');
+    expect(customerOne.password).to.deep.equal('overlook2022')
+  })
 });
