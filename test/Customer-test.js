@@ -69,6 +69,6 @@ describe('Customer', () => {
 
   it('should have a password associated with the user account', () => {
     expect(customerOne.password).to.be.a('string');
-    expect(customerOne.password).to.deep.equal('overlook2022')
-  })
+    expect(customerOne.password).to.deep.equal('overlook2022');
+  });
 });
