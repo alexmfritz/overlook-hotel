@@ -78,11 +78,9 @@ function checkForError(response) {
 
 function displayFetchErrorMessage(error) {
   let message;
-  if (error.message === 'Failed to fetch') {
-    message = 'Something went wrong. Please check your internet connection';
-  } else {
-    message = error.message;
-  }
+  error.message === 'Failed to fetch' ?
+  message = 'Something went wrong. Please check your internet connection' :
+  message = error.message;
   domUpdates.updateInnerText(querySelectors.customerInfo, message);
 }
 
