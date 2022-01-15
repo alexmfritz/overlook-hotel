@@ -3,8 +3,8 @@ import Room from './Room';
 
 export default class Hotel {
   constructor(roomsData, bookingsData) {
-    this.rooms = roomsData.map(room => new Room(room));
-    this.bookings = bookingsData.map(booking => new Booking(booking));
+    this.rooms = roomsData;;
+    this.bookings = bookingsData;
     this.availableRooms = [];
   }
 
