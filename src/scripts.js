@@ -92,8 +92,8 @@ function validateUserCredentials() {
   let userID = loginUsername.value.substring(8, 10);
   getAllData()
   .then(data => {
-    if (!validateUsername(loginUsername) || (loginPassword.value !== 'overlook2022')) {
-      querySelectors.loginErrorMessage.innerText = "Please enter the correct credentials!";
+    if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
+      domUpdates.invalidLoginMessage();
     } else {
       domUpdates.showUserDashboard();
       getSingleCustomerData(userID)
@@ -105,6 +105,10 @@ function validateUserCredentials() {
 
 function validateUsername(usernameInput) {
   return allCustomers.find(customer => customer.username === usernameInput.value) ? true : false;
+}
+
+function validatePassword (passwordInput) {
+  return allCustomers.find(customer => customer.password === passwordInput.value) ? true: false;
 }
 
 export { 
