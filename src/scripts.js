@@ -1,11 +1,25 @@
-// This is the JavaScript entry file - your code begins here
-// Do not delete or rename this file ********
-
-// An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss';
+import { 
+  allCustomersData, 
+  allBookingsData, 
+  allRoomsData, 
+  fetchSingleCustomer, 
+  postNewBooking,
+} from './apiCalls';
+import { domUpdates, querySelectors } from './domUpdates';
 
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
-import './images/turing-logo.png'
+
+function validateUserCredentials() {
+  let loginUsername = document.getElementById('loginUsername');
+  let loginPassword = document.getElementById('loginPassword');
+  if (loginUsername.value !== 'username2022' && loginPassword !== 'overlook2022') {
+    querySelectors.loginErrorMessage.innerText = "Please enter the correct credentials!"
+  } else {
+    domUpdates.showUserDashboard();
+  }
+}
 
 
-console.log('This is the JavaScript entry file - your code begins here.');
+export { 
+  validateUserCredentials
+};
