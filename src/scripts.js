@@ -81,7 +81,7 @@ function displayFetchErrorMessage(error) {
   error.message === 'Failed to fetch' ?
   message = 'Something went wrong. Please check your internet connection' :
   message = error.message;
-  domUpdates.updateInnerText(querySelectors.customerInfo, message);
+  domUpdates.updateInnerText(querySelectors.customerDashboard, message);
 }
 
 function validateUserCredentials() {
@@ -105,8 +105,19 @@ function validateUsername(usernameInput) {
   return allCustomers.find(customer => customer.username === usernameInput.value) ? true : false;
 }
 
-function validatePassword (passwordInput) {
+function validatePassword(passwordInput) {
   return allCustomers.find(customer => customer.password === passwordInput.value) ? true: false;
+}
+
+function determineUserEvent(event) {
+  if (event.target.id === 'customerNewBookingsButton') {
+    console.log('this is the new bookings button')
+  } else if (event.target.id === 'customerCurrentBookingsButton') {
+    console.log('this is the current bookings button')
+  } else if (event.target.id === 'customerBillingInfoButton') {
+    console.log('this is the total price button')
+    domUpdates.displayCustomerTotalCost();
+  }
 }
 
 export { 
@@ -117,5 +128,6 @@ export {
   hotel,
   validateUserCredentials,
   checkForError,
-  getAllData
+  getAllData,
+  determineUserEvent,
 };
