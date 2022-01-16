@@ -9,6 +9,8 @@ import {
   determineUserTabEvent,
   determineBookingTime
 } from "./scripts";
+import Room from './classes/Room';
+import Booking from './classes/Booking';
 
 const loginButton = document.getElementById('loginButton');
 const loginDisplay = document.getElementById('loginDisplay');
@@ -60,7 +62,7 @@ const domUpdates = {
   displayCustomerTotalCost() {
     if (!customerBillingInfoButton.classList.contains('button-tab-clicked')) {
       domUpdates.addClass([customerBillingInfoButton], 'button-tab-clicked');
-      domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
+      domUpdates.removeClass([customerCurrentBookingsButton, customerNewBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
       customer.getCustomerBookings(allBookings);
       customer.getTotalCustomerAmountSpent(allRooms);
@@ -75,7 +77,7 @@ const domUpdates = {
   displayCustomerBookings() {
     if (!customerCurrentBookingsButton.classList.contains('button-tab-clicked')) {
       domUpdates.addClass([customerCurrentBookingsButton], 'button-tab-clicked')
-      domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
+      domUpdates.removeClass([customerBillingInfoButton, customerNewBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
       customer.getCustomerBookings(allBookings);
       domUpdates.populateCenterWithBookingsButtons(customer.bookings);
@@ -99,20 +101,34 @@ const domUpdates = {
   },
 
   populateRightColumnWithLargeDisplay(selection) {
-    let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
-    let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
-    let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
-    dashboardRightColumn.innerHTML = `
+    if (selection instanceof Booking) {
+      let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
+      let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
+      let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
+      dashboardRightColumn.innerHTML = `
     <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
     <section class="customer-single-booking-info">
       <h3>Features: ${selectedRoom.numBeds} ${bedSize}</h3>
       <h3>Has Bidet: ${selectedRoom.bidet}</h3>
       <h3>Price: $${selectedRoom.costPerNight}/night</h3>
     </section>
-    <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
-    </section>
     `;
-    domUpdates.determineIfBookButtonIsNeeded();
+    } else if (selection instanceof Room) {
+      let roomType = selection.roomType.charAt(0).toUpperCase() + selection.roomType.slice(1);
+      let bedSize = selection.bedSize.charAt(0).toUpperCase() + selection.bedSize.slice(1);
+      dashboardRightColumn.innerHTML = `
+      <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
+      <section class="customer-single-booking-info">
+        <h3>Features: ${selection.numBeds} ${bedSize}</h3>
+        <h3>Has Bidet: ${selection.bidet}</h3>
+        <h3>Price: $${selection.costPerNight}/night</h3>
+      </section>
+      <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
+        <button class="customer-book-room-button">BOOK ROOM</button>
+        <p id="successfulBookingMessage"></p>
+      </section>
+    `;
+    }
   },
 
   resetDashboard() {
@@ -154,6 +170,7 @@ const domUpdates = {
   },
 
   populateCenterWithRoomsButtons(rooms) {
+    dashboardCenterColumn.innerHTML = '';
     rooms.forEach(room => {
       let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
       dashboardCenterColumn.innerHTML += `
@@ -168,33 +185,66 @@ const domUpdates = {
     })
   },
 
-  determineIfBookButtonIsNeeded() {
-    let singleBookingSubmitBox = document.getElementById('singleBookingSubmitBox');
-    if (customerNewBookingsButton.classList.contains('button-tab-clicked')) {
-      singleBookingSubmitBox.innerHTML += `
-      <button class="customer-book-room-button">BOOK ROOM</button>
-      <p id="successfulBookingMessage"></p>
-      `
+  determineFilteringNewBookingsEvent(event) {
+    if (event.target.id === 'customerDateInputSubmitButton') {
+      domUpdates.filterByCalendarDateInput();
+    } else if (event.target.id === 'customerTypeInputSubmitButton') {
+      domUpdates.filterByRoomTypeInput();
+    } else if (event.target.id === 'customerClearInputSearchButton') {
+      domUpdates.clearRoomSearchFilters();
     }
   },
 
-  determineCenterColumnEvent(event) {
-    if (event.target.classList.contains('display-booking')) {
+  clearRoomSearchFilters() {
+    hotel.availableRooms = [];
+    domUpdates.populateCenterWithRoomsButtons(hotel.rooms);
+    domUpdates.resetRightColumn();
+  },
+
+  determineColumnEvents(event) {
+    if (event.target.classList.contains('customer-date-search-button')) {
+      domUpdates.determineFilteringNewBookingsEvent(event);
+    } else if (event.target.classList.contains('display-booking')) {
       let selectedBooking = allBookings.find(booking => booking.roomNumber === parseInt(event.target.id));
       domUpdates.populateRightColumnWithLargeDisplay(selectedBooking);
     } else if (event.target.classList.contains('display-room')) {
-
+      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
+      domUpdates.populateRightColumnWithLargeDisplay(selectedRoom);
     }
+  },
+
+  filterByCalendarDateInput() {
+    hotel.availableRooms = [];
+    let customerDateInput = document.getElementById('customerDateInput');
+    let date = customerDateInput.value.split('-').join('/');
+    hotel.filterAllAvailableRooms(date);
+    domUpdates.populateCenterWithRoomsButtons(hotel.availableRooms);
+    domUpdates.resetRightColumn();
+  },
+
+  filterByRoomTypeInput() {
+    let customerRoomyTypeInput = document.getElementById('customerTypeInput');
+    let roomType = customerRoomyTypeInput.value.toLowerCase();
+    hotel.filterRoomByType(roomType);
+    domUpdates.populateCenterWithRoomsButtons(hotel.availableRooms);
+    domUpdates.resetRightColumn();
+    customerRoomyTypeInput.value = '';
+  },
+
+  resetRightColumn() {
+    dashboardRightColumn.innerHTML = '';
   },
 
   populateLeftColumnWithCalendar() {
     dashboardLeftColumn.innerHTML = `
     <section class="customer-date-input-wrapper">
       <label for="customerDateInput">Pick a date:</label>
-      <input class="customer-date-input" id="customerDateInput" type="date" min="2022-01-01" max="2025-12-31">
+      <input class="customer-date-input" id="customerDateInput" value-"YYYY-MM-DD" type="date" min="2022-01-01" max="2025-12-31">
+      <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Room By Date</button>
       <label for="customerTypeInput">Pick a room type:</label>
-      <input class="customer-date-input" id="customerTypeInput">
-      <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Rooms</button>
+      <input class="customer-date-input" id="customerTypeInput" placeholder="ex: single room">
+      <button class="customer-date-search-button" id="customerTypeInputSubmitButton">Search Rooms</button>
+      <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
     </section>
     `;
   },
@@ -256,7 +306,7 @@ customerDisplay.addEventListener('click', (e) => {
   determineUserTabEvent(e);
 });
 customerDashboard.addEventListener('click', (e) => {
-  domUpdates.determineCenterColumnEvent(e);
+  domUpdates.determineColumnEvents(e);
 });
 
 export { 
