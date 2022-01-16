@@ -85,7 +85,7 @@ const domUpdates = {
     customerDashboard.innerHTML = `
     <section class="customer-new-bookings-date" id="dashboardLeftColumn"></section>
     <section class="customer-new-bookings-wrapper" id="dashboardCenterColumn"></section>
-    <section class="customer-new-bookings-wrapper right-column" id="dashboardRightColumn"></section>
+    <section class="customer-new-bookings-wrapper right-column pop-in" id="dashboardRightColumn"></section>
     `;
     dashboardLeftColumn = document.getElementById('dashboardLeftColumn');
     dashboardCenterColumn = document.getElementById('dashboardCenterColumn');
@@ -123,7 +123,7 @@ const domUpdates = {
 
   populateTotalCostChartHead(bookingsData) {
     dashboardCenterColumn.innerHTML = `
-    <table>
+    <table class="scrolling"> 
       <caption>Booking Costs</caption>
       <thead>
           <tr>
