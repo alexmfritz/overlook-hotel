@@ -6,7 +6,8 @@ import {
   hotel, 
   validateUserCredentials,
   getAllData,
-  determineUserEvent
+  determineUserTabEvent,
+  determineBookingTime
 } from "./scripts";
 
 const loginButton = document.getElementById('loginButton');
@@ -59,11 +60,12 @@ const domUpdates = {
   displayCustomerTotalCost() {
     if (!customerBillingInfoButton.classList.contains('button-tab-clicked')) {
       domUpdates.addClass([customerBillingInfoButton], 'button-tab-clicked');
+      domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
       customer.getCustomerBookings(allBookings);
       customer.getTotalCustomerAmountSpent(allRooms);
-      domUpdates.populateTotalCostChartHead(customer.bookings);
-      domUpdates.populateTotalCostRightColumn();
+      domUpdates.populateRightColumnWithChartHead(customer.bookings);
+      domUpdates.populateRightColumnWithTotalCost();
     } else {
       domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
       domUpdates.resetDashboard();
@@ -71,8 +73,33 @@ const domUpdates = {
   },
 
   displayCustomerBookings() {
-    domUpdates.populateDashBoardInnerHTML();
-    customer.getCustomerBookings(allBookings);
+    if (!customerCurrentBookingsButton.classList.contains('button-tab-clicked')) {
+      domUpdates.addClass([customerCurrentBookingsButton], 'button-tab-clicked')
+      domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
+      domUpdates.populateDashBoardInnerHTML();
+      customer.getCustomerBookings(allBookings);
+      domUpdates.populateCenterWithButtons(customer.bookings);
+    } else {
+      domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
+      domUpdates.resetDashboard();
+    }
+  },
+
+  populateRightColumnWithLargeDisplay(selectedBooking) {
+    let selectedRoom = hotel.rooms.find(room => room.number === selectedBooking.roomNumber);
+    let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
+    let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
+    dashboardRightColumn.innerHTML = `
+    <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
+    <section class="customer-single-booking-info">
+      <h3>Features: ${selectedRoom.numBeds} ${bedSize}</h3>
+      <h3>Has Bidet: ${selectedRoom.bidet}</h3>
+      <h3>Price: $${selectedRoom.costPerNight}</h3>
+    </section>
+    <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
+    </section>
+    `;
+    domUpdates.determineIfBookButtonIsNeeded();
   },
 
   resetDashboard() {
@@ -93,24 +120,56 @@ const domUpdates = {
   },
 
   populateCenterWithButtons(bookingsData) {
-    bookingsData.forEach(booking => {
+    let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    sortedBookingsData.forEach(booking => {
       let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
+      let itinerary = determineBookingTime(booking);
+      let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
       dashboardCenterColumn.innerHTML += `
-        <button class="customer-small-room-info">
-          <div class="small-room-info-left">
-            <p>Booking ID: ${booking.id}</p>
-            <p>${bookedRoom.roomType}</p>
+        <button class="customer-small-room-info display-booking slip-in" id="${booking.roomNumber}">
+          <div class="small-room-info-left display-booking" id="${booking.roomNumber}">
+            <p class="display-booking" id="${booking.roomNumber}">${itinerary}</p>
+            <p class="display-booking" id="${booking.roomNumber}">${booking.date}</p>
           </div>
-          <div class="small-room-info-right">
-            <p>${booking.date}</p>
-            <p>$${bookedRoom.costPerNight}</p>
+          <div class="small-room-info-right display-booking" id="${booking.roomNumber}">
+            <p class="display-booking" id="${booking.roomNumber}">${roomType}</p>
+            <p class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}</p>
           </div>
         </button>
       `;
     });
   },
 
-  populateTotalCostRightColumn() {
+  determineIfBookButtonIsNeeded() {
+    let singleBookingSubmitBox = document.getElementById('singleBookingSubmitBox');
+    if (customerNewBookingsButton.classList.contains('button-tab-clicked')) {
+      singleBookingSubmitBox.innerHTML += `
+      <button class="customer-book-room-button">BOOK ROOM</button>
+      <p id="successfulBookingMessage"></p>
+      `
+    }
+  },
+
+  determineCenterColumnEvent(event) {
+    if (event.target.classList.contains('display-booking')) {
+      let selectedBooking = allBookings.find(booking => booking.roomNumber === parseInt(event.target.id));
+      domUpdates.populateRightColumnWithLargeDisplay(selectedBooking);
+    }
+  },
+
+  populateLeftColumnWithCalendar() {
+    dashboardLeftColumn.innerHTML = `
+    <section class="customer-date-input-wrapper">
+      <label for="customerDateInput">Pick a date:</label>
+      <input class="customer-date-input" id="customerDateInput" type="date" min="2022-01-01" max="2025-12-31">
+      <label for="customerTypeInput">Pick a room type:</label>
+      <input class="customer-date-input" id="customerTypeInput">
+      <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Rooms</button>
+    </section>
+    `;
+  },
+
+  populateRightColumnWithTotalCost() {
     dashboardRightColumn.innerHTML = `
     <h2 class="total-bill-headline">Your total bill for all bookings, past and present at the Overlook Hotel is:</h2>
     <h3 class="total-bill-amount">$${customer.totalSpent.toFixed(2)}</h3>
@@ -121,7 +180,7 @@ const domUpdates = {
     `;
   },
 
-  populateTotalCostChartHead(bookingsData) {
+  populateRightColumnWithChartHead(bookingsData) {  
     dashboardCenterColumn.innerHTML = `
     <table class="scrolling"> 
       <caption>Booking Costs</caption>
@@ -164,8 +223,11 @@ const querySelectors = {
 
 loginButton.addEventListener('click', validateUserCredentials);
 customerDisplay.addEventListener('click', (e) => {
-  determineUserEvent(e);
-})
+  determineUserTabEvent(e);
+});
+customerDashboard.addEventListener('click', (e) => {
+  domUpdates.determineCenterColumnEvent(e);
+});
 
 export { 
   domUpdates, 
