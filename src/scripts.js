@@ -109,13 +109,12 @@ function validatePassword(passwordInput) {
   return allCustomers.find(customer => customer.password === passwordInput.value) ? true: false;
 }
 
-function determineUserEvent(event) {
+function determineUserTabEvent(event) {
   if (event.target.id === 'customerNewBookingsButton') {
     console.log('this is the new bookings button')
   } else if (event.target.id === 'customerCurrentBookingsButton') {
-    console.log('this is the current bookings button')
+    domUpdates.displayCustomerBookings();
   } else if (event.target.id === 'customerBillingInfoButton') {
-    console.log('this is the total price button')
     domUpdates.displayCustomerTotalCost();
   }
 }
@@ -129,5 +128,5 @@ export {
   validateUserCredentials,
   checkForError,
   getAllData,
-  determineUserEvent,
+  determineUserTabEvent,
 };
