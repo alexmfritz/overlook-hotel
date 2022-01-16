@@ -122,6 +122,12 @@
   background-color: $pinkrum;
 }
 
+.small-room-info {
+  display: flex;
+  justify-content: space-evenly;
+  @include height-width("", 100%);
+}
+
 .total-bill-headline {
   font-size: 28px;
 }
