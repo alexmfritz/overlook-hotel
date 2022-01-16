@@ -31,6 +31,31 @@ main {
   @include height-width(100%);
 }
 
+button {
+  cursor: pointer;
+}
+
+table {
+  @include height-width("", 100%);
+}
+
+caption {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+th {
+  font-size: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+td {
+  text-align: left;
+  padding: 5px 25px 5px 5px;
+  font-size: 18px;
+}
+
 .customer-display,
 .manager-display,
 .login-display {
