@@ -128,8 +128,21 @@
 
 .total-bill-amount {
   font-size: 24px;
+  -webkit-animation: grow 1.5s ease-in-out 4s infinite both;
+  animation: grow 1.5s ease-in-out 4s infinite both;
 }
 
 .total-bill-message {
   font-size: 20px;
+}
+
+.scrolling {
+  -moz-animation: scroller 2s linear;
+  -webkit-animation: scroller 2s linear;
+  animation: scroller 2s linear;
+}
+
+.pop-in {
+  -webkit-animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
+  animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
 }
