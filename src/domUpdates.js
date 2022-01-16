@@ -6,7 +6,8 @@ import {
   hotel, 
   validateUserCredentials,
   getAllData,
-  determineUserTabEvent
+  determineUserTabEvent,
+  determineBookingTime
 } from "./scripts";
 
 const loginButton = document.getElementById('loginButton');
@@ -122,15 +123,16 @@ const domUpdates = {
     let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
     sortedBookingsData.forEach(booking => {
       let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
+      let itinerary = determineBookingTime(booking);
       let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
       dashboardCenterColumn.innerHTML += `
         <button class="customer-small-room-info display-booking slip-in" id="${booking.roomNumber}">
           <div class="small-room-info-left display-booking" id="${booking.roomNumber}">
-            <p class="display-booking" id="${booking.roomNumber}">Booking ID: ${booking.id.toUpperCase()}</p>
-            <p class="display-booking" id="${booking.roomNumber}">${roomType}</p>
+            <p class="display-booking" id="${booking.roomNumber}">${itinerary}</p>
+            <p class="display-booking" id="${booking.roomNumber}">${booking.date}</p>
           </div>
           <div class="small-room-info-right display-booking" id="${booking.roomNumber}">
-            <p class="display-booking" id="${booking.roomNumber}">${booking.date}</p>
+            <p class="display-booking" id="${booking.roomNumber}">${roomType}</p>
             <p class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}</p>
           </div>
         </button>
