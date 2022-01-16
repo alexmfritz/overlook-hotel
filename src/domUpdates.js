@@ -18,7 +18,7 @@ const customerDashboard = document.getElementById('customerDashboard');
 const navUserInfo = document.getElementById('navUserInfo');
 const usernameDisplay = document.getElementById('usernameDisplay');
 const userIdDisplay = document.getElementById('userIdDisplay');
-const customerNewBookingsButton = document.getElementsByName('customerNewBookingsButton');
+const customerNewBookingsButton = document.getElementById('customerNewBookingsButton');
 const customerCurrentBookingsButton = document.getElementById('customerCurrentBookingsButton');
 const customerBillingInfoButton = document.getElementById('customerBillingInfoButton');
 let dashboardLeftColumn;
@@ -78,15 +78,28 @@ const domUpdates = {
       domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
       customer.getCustomerBookings(allBookings);
-      domUpdates.populateCenterWithButtons(customer.bookings);
+      domUpdates.populateCenterWithBookingsButtons(customer.bookings);
     } else {
       domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
       domUpdates.resetDashboard();
     }
   },
 
-  populateRightColumnWithLargeDisplay(selectedBooking) {
-    let selectedRoom = hotel.rooms.find(room => room.number === selectedBooking.roomNumber);
+  displayBookNewRooms() {
+    if (!customerNewBookingsButton.classList.contains('button-tab-clicked')) {
+      domUpdates.addClass([customerNewBookingsButton], 'button-tab-clicked')
+      domUpdates.removeClass([customerBillingInfoButton, customerCurrentBookingsButton], 'button-tab-clicked');
+      domUpdates.populateDashBoardInnerHTML();
+      domUpdates.populateLeftColumnWithCalendar();
+      domUpdates.populateCenterWithRoomsButtons();
+    } else {
+      domUpdates.removeClass([customerNewBookingsButton], 'button-tab-clicked');
+      domUpdates.resetDashboard();
+    }
+  },
+
+  populateRightColumnWithLargeDisplay(selection) {
+    let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
     let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
     let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
     dashboardRightColumn.innerHTML = `
@@ -94,7 +107,7 @@ const domUpdates = {
     <section class="customer-single-booking-info">
       <h3>Features: ${selectedRoom.numBeds} ${bedSize}</h3>
       <h3>Has Bidet: ${selectedRoom.bidet}</h3>
-      <h3>Price: $${selectedRoom.costPerNight}</h3>
+      <h3>Price: $${selectedRoom.costPerNight}/night</h3>
     </section>
     <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
     </section>
@@ -119,25 +132,40 @@ const domUpdates = {
     dashboardRightColumn = document.getElementById('dashboardRightColumn');
   },
 
-  populateCenterWithButtons(bookingsData) {
+  populateCenterWithBookingsButtons(bookingsData) {
     let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
     sortedBookingsData.forEach(booking => {
       let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
       let itinerary = determineBookingTime(booking);
       let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
       dashboardCenterColumn.innerHTML += `
-        <button class="customer-small-room-info display-booking slip-in" id="${booking.roomNumber}">
+        <button class="customer-small-room-info display-booking" id="${booking.roomNumber}">
           <div class="small-room-info-left display-booking" id="${booking.roomNumber}">
             <p class="display-booking" id="${booking.roomNumber}">${itinerary}</p>
             <p class="display-booking" id="${booking.roomNumber}">${booking.date}</p>
           </div>
           <div class="small-room-info-right display-booking" id="${booking.roomNumber}">
             <p class="display-booking" id="${booking.roomNumber}">${roomType}</p>
-            <p class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}</p>
+            <p class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}/night</p>
           </div>
         </button>
       `;
     });
+  },
+
+  populateCenterWithRoomsButtons() {
+    hotel.rooms.forEach(room => {
+      let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
+      dashboardCenterColumn.innerHTML += `
+      <button class="customer-small-room-info display-room" id=${room.number}>
+        <section class="small-room-info display-room" id=${room.number}> 
+          <p class="display-room" id=${room.number}>Room ${room.number}</p>
+          <p class="display-room" id=${room.number}>${roomType}</p>
+          <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
+        </section>
+      </button>
+      `
+    })
   },
 
   determineIfBookButtonIsNeeded() {
@@ -154,6 +182,8 @@ const domUpdates = {
     if (event.target.classList.contains('display-booking')) {
       let selectedBooking = allBookings.find(booking => booking.roomNumber === parseInt(event.target.id));
       domUpdates.populateRightColumnWithLargeDisplay(selectedBooking);
+    } else if (event.target.classList.contains('display-room')) {
+
     }
   },
 
