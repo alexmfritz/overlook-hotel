@@ -91,7 +91,7 @@ const domUpdates = {
       domUpdates.removeClass([customerBillingInfoButton, customerCurrentBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
       domUpdates.populateLeftColumnWithCalendar();
-      domUpdates.populateCenterWithRoomsButtons();
+      domUpdates.populateCenterWithRoomsButtons(hotel.rooms);
     } else {
       domUpdates.removeClass([customerNewBookingsButton], 'button-tab-clicked');
       domUpdates.resetDashboard();
@@ -153,8 +153,8 @@ const domUpdates = {
     });
   },
 
-  populateCenterWithRoomsButtons() {
-    hotel.rooms.forEach(room => {
+  populateCenterWithRoomsButtons(rooms) {
+    rooms.forEach(room => {
       let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
       dashboardCenterColumn.innerHTML += `
       <button class="customer-small-room-info display-room" id=${room.number}>
