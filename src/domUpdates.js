@@ -102,10 +102,17 @@ const domUpdates = {
 
   populateRightColumnWithLargeDisplay(selection) {
     if (selection instanceof Booking) {
-      let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
-      let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
-      let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
-      dashboardRightColumn.innerHTML = `
+      domUpdates.populateRightColumnWithBookingInfo(selection);
+    } else if (selection instanceof Room) {
+      domUpdates.populateRightColumnWithRoomInfo(selection);
+    }
+  },
+
+  populateRightColumnWithBookingInfo(selection) {
+    let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
+    let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
+    let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
+    dashboardRightColumn.innerHTML = `
     <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
     <section class="customer-single-booking-info">
       <h3>Features: ${selectedRoom.numBeds} ${bedSize}</h3>
@@ -113,21 +120,32 @@ const domUpdates = {
       <h3>Price: $${selectedRoom.costPerNight}/night</h3>
     </section>
     `;
-    } else if (selection instanceof Room) {
-      let roomType = selection.roomType.charAt(0).toUpperCase() + selection.roomType.slice(1);
-      let bedSize = selection.bedSize.charAt(0).toUpperCase() + selection.bedSize.slice(1);
-      dashboardRightColumn.innerHTML = `
-      <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
-      <section class="customer-single-booking-info">
-        <h3>Features: ${selection.numBeds} ${bedSize}</h3>
-        <h3>Has Bidet: ${selection.bidet}</h3>
-        <h3>Price: $${selection.costPerNight}/night</h3>
-      </section>
-      <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
-        <button class="customer-book-room-button">BOOK ROOM</button>
-        <p id="successfulBookingMessage"></p>
-      </section>
+  },
+
+  populateRightColumnWithRoomInfo(selection) {
+    let roomType = selection.roomType.charAt(0).toUpperCase() + selection.roomType.slice(1);
+    let bedSize = selection.bedSize.charAt(0).toUpperCase() + selection.bedSize.slice(1);
+    dashboardRightColumn.innerHTML = `
+    <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
+    <section class="customer-single-booking-info">
+      <h3>Features: ${selection.numBeds} ${bedSize}</h3>
+      <h3>Has Bidet: ${selection.bidet}</h3>
+      <h3>Price: $${selection.costPerNight}/night</h3>
+    </section>
+    <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
+    </section>
     `;
+    domUpdates.determineIfBookButtonIsNeeded(selection)
+  },
+
+  determineIfBookButtonIsNeeded(selection) {
+    let singleBookingSubmitBox = document.getElementById('singleBookingSubmitBox');
+    let customerDateInput = document.getElementById('customerDateInput');
+    if (customerDateInput.value) {
+      singleBookingSubmitBox.innerHTML = `
+      <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
+      <p id="successfulBookingMessage"></p>
+      `
     }
   },
 
@@ -196,6 +214,8 @@ const domUpdates = {
   },
 
   clearRoomSearchFilters() {
+    let customerDateInput = document.getElementById('customerDateInput');
+    customerDateInput.value = '';
     hotel.availableRooms = [];
     domUpdates.populateCenterWithRoomsButtons(hotel.rooms);
     domUpdates.resetRightColumn();
