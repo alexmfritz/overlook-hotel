@@ -18,8 +18,25 @@ export default class Hotel {
     }, []);
   }
 
+  // filterAllAvailableRooms(date) {
+  //   const bookedRooms = this.bookings.reduce((acc, booking) => {
+  //     if (booking.date === date) {
+  //       acc.push(booking.roomNumber)
+  //     }
+  //     return acc
+  //   }, [])
+
+  //   this.availableRooms = this.rooms.filter((room) => {
+  //     return !bookedRooms.includes(room.number)
+  //   })
+  // }
+
   filterRoomByType(type) {
-    return this.availableRooms.filter(room => room.roomType === type);
+    if (!this.availableRooms.length) {
+      this.availableRooms = this.rooms.filter(room => room.roomType === type);
+    } else {
+      this.availableRooms = this.availableRooms.filter(room => room.roomType === type);
+    }
   }
 
   // calculateTotalOccupancy(date) {

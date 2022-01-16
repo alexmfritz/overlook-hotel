@@ -70,7 +70,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   text-align: center;
-  @include height-width(100px, 90%);
+  @include height-width(200px, 90%);
 }
 
 .right-column {
@@ -120,6 +120,12 @@
 
 .customer-book-room-button:hover {
   background-color: $pinkrum;
+}
+
+.small-room-info {
+  display: flex;
+  justify-content: space-evenly;
+  @include height-width("", 100%);
 }
 
 .total-bill-headline {
