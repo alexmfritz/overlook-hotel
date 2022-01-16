@@ -111,7 +111,7 @@ function validatePassword(passwordInput) {
 
 function determineUserTabEvent(event) {
   if (event.target.id === 'customerNewBookingsButton') {
-    console.log('this is the new bookings button')
+    domUpdates.displayBookNewRooms();
   } else if (event.target.id === 'customerCurrentBookingsButton') {
     domUpdates.displayCustomerBookings();
   } else if (event.target.id === 'customerBillingInfoButton') {
