@@ -70,7 +70,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   text-align: center;
-  @include height-width(100px, 90%);
+  @include height-width(200px, 90%);
 }
 
 .right-column {
