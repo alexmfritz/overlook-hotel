@@ -11,8 +11,8 @@
 
 .welcome-message {
   font-size: 50px;
-  -webkit-animation: welcome-message 3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
-  animation: welcome-message 3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+  -webkit-animation: welcome-message 1.2s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+  animation: welcome-message 1.2s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
 }
 
 .customer-new-bookings-date {
@@ -29,7 +29,6 @@
   align-items: center;
   overflow-y: scroll;
   @include height-width(80%, 40%);
-  border: 1px solid $blackrum;
 }
 
 .customer-new-bookings-wrapper::-webkit-scrollbar {
@@ -50,10 +49,20 @@
 
 .customer-small-room-info:hover {
   background-color: $redrum-hover;
+  -webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+  animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
 .customer-small-room-info > p {
   font-size: 16px;
+}
+
+.small-room-info-left {
+  text-align: left;
+}
+
+.small-room-info-right {
+  text-align: right;
 }
 
 .customer-date-input-wrapper {
@@ -62,6 +71,13 @@
   justify-content: space-evenly;
   text-align: center;
   @include height-width(100px, 90%);
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
 }
 
 .customer-date-input {
@@ -104,4 +120,16 @@
 
 .customer-book-room-button:hover {
   background-color: $pinkrum;
+}
+
+.total-bill-headline {
+  font-size: 28px;
+}
+
+.total-bill-amount {
+  font-size: 24px;
+}
+
+.total-bill-message {
+  font-size: 20px;
 }
