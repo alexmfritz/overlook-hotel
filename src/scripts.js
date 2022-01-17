@@ -90,25 +90,27 @@ function validateUserCredentials() {
   let loginUsername = document.getElementById('loginUsername');
   let loginPassword = document.getElementById('loginPassword');
   let userID = loginUsername.value.substring(8, 10);
-  getAllData()
-  .then(data => {
-    if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
+  if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
       domUpdates.invalidLoginMessage();
-    } else {
-      domUpdates.showUserDashboard();
-      getSingleCustomerData(userID)
-      .then(data => createNewSingleUser(data))
-      .catch(error => displayFetchErrorMessage(error))
-      }
-  });
+  } else {
+      getAllData().then(data => {
+        domUpdates.showUserDashboard();
+        getSingleCustomerData(userID)
+        .then(data => createNewSingleUser(data))
+        .catch(error => displayFetchErrorMessage(error))
+      });
+    }
 }
 
 function validateUsername(usernameInput) {
-  return hotel.customers.find(customer => customer.username === usernameInput.value) ? true : false;
+  let id = usernameInput.value.slice(8, 10);
+  return usernameInput.value.slice(0, 8) === 'username' && 
+  usernameInput.value.length === 10 &&
+  (0 < id  && id < 51) ? true : false;
 }
 
 function validatePassword(passwordInput) {
-  return hotel.customers.find(customer => customer.password === passwordInput.value) ? true: false;
+  return passwordInput.value === 'overlook2022' ? true: false;
 }
 
 function determineUserTabEvent(event) {
