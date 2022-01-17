@@ -1,17 +1,13 @@
 import {
   customer,
-  allCustomers,
-  allBookings,
-  allRooms,
   hotel, 
   validateUserCredentials,
-  getAllData,
   determineUserTabEvent,
-  determineBookingTime
+  determineBookingTime,
+  completeCustomerBooking
 } from "./scripts";
 import Room from './classes/Room';
 import Booking from './classes/Booking';
-
 const loginButton = document.getElementById('loginButton');
 const loginDisplay = document.getElementById('loginDisplay');
 const customerDisplay = document.getElementById('customerDisplay');
@@ -64,8 +60,8 @@ const domUpdates = {
       domUpdates.addClass([customerBillingInfoButton], 'button-tab-clicked');
       domUpdates.removeClass([customerCurrentBookingsButton, customerNewBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
-      customer.getCustomerBookings(allBookings);
-      customer.getTotalCustomerAmountSpent(allRooms);
+      customer.getCustomerBookings(hotel.bookings);
+      customer.getTotalCustomerAmountSpent(hotel.rooms);
       domUpdates.populateRightColumnWithChartHead(customer.bookings);
       domUpdates.populateRightColumnWithTotalCost();
     } else {
@@ -79,7 +75,7 @@ const domUpdates = {
       domUpdates.addClass([customerCurrentBookingsButton], 'button-tab-clicked')
       domUpdates.removeClass([customerBillingInfoButton, customerNewBookingsButton], 'button-tab-clicked');
       domUpdates.populateDashBoardInnerHTML();
-      customer.getCustomerBookings(allBookings);
+      customer.getCustomerBookings(hotel.bookings);
       domUpdates.populateCenterWithBookingsButtons(customer.bookings);
     } else {
       domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
@@ -145,7 +141,7 @@ const domUpdates = {
       singleBookingSubmitBox.innerHTML = `
       <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
       <p id="successfulBookingMessage"></p>
-      `
+      `;
     }
   },
 
@@ -188,19 +184,25 @@ const domUpdates = {
   },
 
   populateCenterWithRoomsButtons(rooms) {
-    dashboardCenterColumn.innerHTML = '';
-    rooms.forEach(room => {
-      let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
-      dashboardCenterColumn.innerHTML += `
-      <button class="customer-small-room-info display-room" id=${room.number}>
-        <section class="small-room-info display-room" id=${room.number}> 
-          <p class="display-room" id=${room.number}>Room ${room.number}</p>
-          <p class="display-room" id=${room.number}>${roomType}</p>
-          <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
-        </section>
-      </button>
+    if (!rooms.length) {
+      dashboardCenterColumn.innerHTML = `
+      <h2>We are so, so, so, so, SO SORRY there are no rooms available for this date!</h2>
       `
-    })
+    } else {
+      dashboardCenterColumn.innerHTML = '';
+      rooms.forEach(room => {
+        let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
+        dashboardCenterColumn.innerHTML += `
+        <button class="customer-small-room-info display-room" id=${room.number}>
+          <section class="small-room-info display-room" id=${room.number}> 
+            <p class="display-room" id=${room.number}>Room ${room.number}</p>
+            <p class="display-room" id=${room.number}>${roomType}</p>
+            <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
+          </section>
+        </button>
+        `
+      })
+    }
   },
 
   determineFilteringNewBookingsEvent(event) {
@@ -225,11 +227,24 @@ const domUpdates = {
     if (event.target.classList.contains('customer-date-search-button')) {
       domUpdates.determineFilteringNewBookingsEvent(event);
     } else if (event.target.classList.contains('display-booking')) {
-      let selectedBooking = allBookings.find(booking => booking.roomNumber === parseInt(event.target.id));
+      let selectedBooking = hotel.bookings.find(booking => booking.roomNumber === parseInt(event.target.id));
       domUpdates.populateRightColumnWithLargeDisplay(selectedBooking);
     } else if (event.target.classList.contains('display-room')) {
       let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
       domUpdates.populateRightColumnWithLargeDisplay(selectedRoom);
+    } else if (event.target.classList.contains('customer-book-room-button')) {
+      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
+      let customerDateInput = document.getElementById('customerDateInput');
+      let date = customerDateInput.value.split('-').join('/');
+      completeCustomerBooking(date, selectedRoom.number, event)
+    }
+  },
+
+  informCustomerOfBookedRoom(event) {
+    if (event.target.classList.contains('customer-book-room-button')) {
+      domUpdates.addClass([event.target], 'hidden')
+      let successMessage = document.getElementById('successfulBookingMessage');
+      successMessage.innerText = "Your room has been booked!";
     }
   },
 
