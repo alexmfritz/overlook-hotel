@@ -6,6 +6,11 @@ import {
   completeCustomerBooking,
   getTodaysDate
 } from "./scripts";
+import './images/residential-suite.png';
+import './images/junior-suite.png';
+import './images/suite.png';
+import './images/single-room.png';
+import { hotelPics } from './data/hotel-pics';
 import Room from './classes/Room';
 import Booking from './classes/Booking';
 const loginButton = document.getElementById('loginButton');
@@ -44,7 +49,7 @@ const domUpdates = {
 
   showUserInfo() {
     domUpdates.removeClass([navUserInfo], 'hidden');
-    domUpdates.updateInnerText(usernameDisplay, `Username: ${hotel.currentCustomer.name}`);
+    domUpdates.updateInnerText(usernameDisplay, `${hotel.currentCustomer.name}`);
     domUpdates.updateInnerText(userIdDisplay, `User ID: ${hotel.currentCustomer.id}`);
   },
 
@@ -119,12 +124,12 @@ const domUpdates = {
   populateRightColumnWithBookingInfo(selection) {
     let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
     let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
-    let bedSize = selectedRoom.bedSize.charAt(0).toUpperCase() + selectedRoom.bedSize.slice(1);
+    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selectedRoom.roomType)
     dashboardRightColumn.innerHTML = `
     <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
+    <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
     <section class="customer-single-booking-info">
-      <h3>Features: ${selectedRoom.numBeds} ${bedSize}</h3>
-      <h3>Has Bidet: ${selectedRoom.bidet}</h3>
+      <h3>Booking ID: ${selection.id.toUpperCase()}</h3>
       <h3>Price: $${selectedRoom.costPerNight}/night</h3>
     </section>
     `;
@@ -138,11 +143,14 @@ const domUpdates = {
   },
 
   populateRightColumnWithRoomInfo(selection, roomType, bedSize) {
+    let bidet = selection.bidet ? 'yes' : 'no';
+    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selection.roomType);
     dashboardRightColumn.innerHTML = `
     <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
+    <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
     <section class="customer-single-booking-info">
-      <h3>Features: ${selection.numBeds} ${bedSize}</h3>
-      <h3>Has Bidet: ${selection.bidet}</h3>
+      <h3>Features: ${selection.numBeds}x ${bedSize}</h3>
+      <h3>Bidet: ${bidet}</h3>
       <h3>Price: $${selection.costPerNight}/night</h3>
     </section>
     <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
@@ -317,15 +325,25 @@ const domUpdates = {
   populateLeftColumnWithCalendar() {
     dashboardLeftColumn.innerHTML = `
     <section class="customer-date-input-wrapper">
+    <div class="input-box">
       <label for="customerDateInput">Pick a date:</label>
       <input class="customer-date-input" id="customerDateInput" type="date">
-      <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Room By Date</button>
+      <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search By Date</button>
+    </div>
+    <div class="input-box">
       <label for="customerTypeInput">Pick a room type:</label>
       <input class="customer-date-input" id="customerTypeInput" placeholder="ex: single room">
-      <button class="customer-date-search-button" id="customerTypeInputSubmitButton">Search Rooms</button>
+      <button class="customer-date-search-button" id="customerTypeInputSubmitButton">Search By Type</button>
+    </div>
+    <div class="input-box">
       <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
-    </section>
+    </div>
+      </section>
     `;
+    domUpdates.setCalendarDate();
+  },
+
+  setCalendarDate() {
     let customerDateInput = document.getElementById('customerDateInput');
     customerDateInput.min = getTodaysDate().replaceAll('/', '-');
   },
