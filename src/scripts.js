@@ -12,13 +12,10 @@ import Room from './classes/Room';
 import Booking from './classes/Booking';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
-
-let allCustomers;
-let customer;
 let hotel;
 
 function completeCustomerBooking(date, roomNumber, event) {
-  const booking = customer.createBooking(date, roomNumber);
+  const booking = hotel.currentCustomer.createBooking(date, roomNumber);
   postNewBooking(booking).then(data => {
     fetchData('bookings').then(data => {
       hotel.bookings = updateBookings(data)
@@ -28,10 +25,10 @@ function completeCustomerBooking(date, roomNumber, event) {
 }
 
 function updateCustomer(date, event) {
-  customer.getCustomerBookings(hotel.bookings);
+  hotel.currentCustomer.getCustomerBookings(hotel.bookings);
   domUpdates.informCustomerOfBookedRoom(event);
   hotel.filterAllAvailableRooms(date);
-  domUpdates.populateCenterWithRoomsButtons(hotel.availableRooms);
+  domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
 }
 
 function updateBookings(data) {
@@ -57,24 +54,20 @@ function createAllBookingsData(data) {
   return data[1].bookings.map(booking => new Booking(booking));
 }
 
-function createAllCustomersData(customersData) {
-  allCustomers = customersData.map(customer => new Customer(customer));
+function createAllCustomersData(data) {
+  return data[2].customers.map(customer => new Customer(customer));
 }
 
 function createNewSingleUser(singleCustomer) {
-  customer = new Customer(singleCustomer);
+  hotel.currentCustomer = new Customer(singleCustomer);
   domUpdates.showUserInfo();
-}
-
-function getAllCustomersData(data) {
-  createAllCustomersData(data[2].customers);
 }
 
 function loadAllData(data) {
   let rooms = createAllRoomsData(data);
   let bookings = createAllBookingsData(data);
-  getAllCustomersData(data);
-  hotel = new Hotel(rooms, bookings);
+  let customers = createAllCustomersData(data);
+  hotel = new Hotel(rooms, bookings, customers);
 }
 
 function checkForError(response) {
@@ -111,11 +104,11 @@ function validateUserCredentials() {
 }
 
 function validateUsername(usernameInput) {
-  return allCustomers.find(customer => customer.username === usernameInput.value) ? true : false;
+  return hotel.customers.find(customer => customer.username === usernameInput.value) ? true : false;
 }
 
 function validatePassword(passwordInput) {
-  return allCustomers.find(customer => customer.password === passwordInput.value) ? true: false;
+  return hotel.customers.find(customer => customer.password === passwordInput.value) ? true: false;
 }
 
 function determineUserTabEvent(event) {
@@ -151,8 +144,6 @@ function determineBookingTime(booking) {
 }
 
 export { 
-  customer,
-  allCustomers,
   hotel,
   validateUserCredentials,
   checkForError,
