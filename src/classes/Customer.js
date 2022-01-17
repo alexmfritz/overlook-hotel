@@ -33,4 +33,12 @@ export default class Customer {
       return `username${this.id}`;
     }
   }
+
+  createBooking(date, roomNumber) {
+    return {
+      userID: this.id,
+      date: date,
+      roomNumber: parseInt(roomNumber)
+    }
+  }
 }

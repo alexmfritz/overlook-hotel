@@ -5,21 +5,38 @@ import {
   allRoomsData, 
   fetchSingleCustomer, 
   postNewBooking,
+  fetchData
 } from './apiCalls';
-import { 
-  domUpdates, 
-  querySelectors
-} from './domUpdates';
+import { domUpdates, querySelectors } from './domUpdates';
 import Room from './classes/Room';
 import Booking from './classes/Booking';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
 
-let allRooms;
-let allBookings;
 let allCustomers;
 let customer;
 let hotel;
+
+function completeCustomerBooking(date, roomNumber, event) {
+  const booking = customer.createBooking(date, roomNumber);
+  postNewBooking(booking).then(data => {
+    fetchData('bookings').then(data => {
+      hotel.bookings = updateBookings(data)
+      updateCustomer(date, event)
+    })
+  }).catch(error => displayFetchErrorMessage(error))
+}
+
+function updateCustomer(date, event) {
+  customer.getCustomerBookings(hotel.bookings);
+  domUpdates.informCustomerOfBookedRoom(event);
+  hotel.filterAllAvailableRooms(date);
+  domUpdates.populateCenterWithRoomsButtons(hotel.availableRooms);
+}
+
+function updateBookings(data) {
+  return data.bookings.map(booking => new Booking(booking));
+}
 
 function getAllData() {
   return Promise.all([allRoomsData, allBookingsData, allCustomersData])
@@ -32,12 +49,12 @@ function getSingleCustomerData(userID) {
   return Promise.resolve(singleCustomerFetch);
 }
 
-function createAllRoomsData(roomsData) {
-  allRooms = roomsData.map(room => new Room(room));
+function createAllRoomsData(data) {
+  return data[0].rooms.map(room => new Room(room));
 }
 
-function createAllBookingsData(bookingsData) {
-  allBookings = bookingsData.map(booking => new Booking(booking));
+function createAllBookingsData(data) {
+  return data[1].bookings.map(booking => new Booking(booking));
 }
 
 function createAllCustomersData(customersData) {
@@ -49,23 +66,15 @@ function createNewSingleUser(singleCustomer) {
   domUpdates.showUserInfo();
 }
 
-function getAllRoomsData(data) {
-  createAllRoomsData(data[0].rooms);
-}
-
-function getAllBookingsData(data) {
-  createAllBookingsData(data[1].bookings);
-}
-
 function getAllCustomersData(data) {
   createAllCustomersData(data[2].customers);
 }
 
 function loadAllData(data) {
-  getAllRoomsData(data);
-  getAllBookingsData(data);
+  let rooms = createAllRoomsData(data);
+  let bookings = createAllBookingsData(data);
   getAllCustomersData(data);
-  hotel = new Hotel(allRooms, allBookings);
+  hotel = new Hotel(rooms, bookings);
 }
 
 function checkForError(response) {
@@ -139,12 +148,13 @@ function determineBookingTime(booking) {
 export { 
   customer,
   allCustomers,
-  allBookings,
-  allRooms,
+  // allBookings,
+  // allRooms,
   hotel,
   validateUserCredentials,
   checkForError,
   getAllData,
   determineUserTabEvent,
-  determineBookingTime
+  determineBookingTime,
+  completeCustomerBooking
 };
