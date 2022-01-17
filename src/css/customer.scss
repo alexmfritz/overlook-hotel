@@ -65,12 +65,14 @@
   text-align: right;
 }
 
-.customer-date-input-wrapper {
+.customer-date-input-wrapper,
+.input-box {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   text-align: center;
   @include height-width(200px, 90%);
+  @include top-bot-marg(5px, 5px);
 }
 
 .right-column {
@@ -106,9 +108,12 @@
   font-size: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  align-items: center;
   @include height-width(40%, 100%);
-  @include right-left-pad("", 50px);
+}
+
+.customer-single-booking-info > h3{
+  @include top-bot-marg(5px, 5px);
 }
 
 .customer-book-room-button {
@@ -151,4 +156,11 @@
 .pop-in {
   -webkit-animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
   animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
+}
+
+.room-image {
+  min-height: 65%;
+  max-height: 90%;
+  max-height: 65%;
+  max-width: 90%;
 }
