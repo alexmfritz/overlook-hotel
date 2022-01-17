@@ -1,19 +1,27 @@
 import { expect } from 'chai';
-import bookingTestData from '../src/data/booking-test-data';
 import roomTestData from '../src/data/room-test-data';
+import bookingTestData from '../src/data/booking-test-data';
+import customerTestData from '../src/data/customer-test-data';
 import Room from '../src/classes/Room';
 import Booking from '../src/classes/Booking';
+import Customer from '../src/classes/Customer';
 import Hotel from '../src/classes/Hotel';
+
+const getRandomIndex = (array) => {
+  return array[Math.floor(Math.random() * array.length)];
+}
 
 describe('Hotel', () => {
   let rooms;
   let bookings;
+  let customers;
   let hotel;
 
   beforeEach(() => {
     rooms = roomTestData.map(room => new Room(room));
     bookings = bookingTestData.map(booking => new Booking(booking));
-    hotel = new Hotel(rooms, bookings);
+    customers = customerTestData.map(customer => new Customer(customer));
+    hotel = new Hotel(rooms, bookings, customers);
   });
 
   it('should be an instance of Hotel', () => {
@@ -30,6 +38,20 @@ describe('Hotel', () => {
     expect(hotel.bookings.length).to.deep.equal(7);
   });
 
+  it('should be able to keep track of all the customers who have interacted with the hotel', () => {
+    expect(hotel.customers).to.be.an('Array');
+    expect(hotel.customers.length).to.deep.equal(6);
+  });
+
+  it('should be able to keep track of the current customer with no customer by default', () => {
+    expect(hotel.currentCustomer).to.deep.equal(null);
+  });
+
+  it('should be able to keep track of the current customer using the hotel after login', () => {
+    hotel.currentCustomer = new Customer(getRandomIndex(hotel.customers));
+    expect(hotel.currentCustomer).to.be.an.instanceOf(Customer);
+  });
+
   it('should have no available rooms by default', () => {
     expect(hotel.availableRooms).to.deep.equal([]);
   });
@@ -42,19 +64,12 @@ describe('Hotel', () => {
 
   it('should be able to filter by room types once available rooms are shown', () => {
     hotel.filterAllAvailableRooms('2022/01/10');
-    let singleRooms = hotel.filterRoomByType('single room');
-    let residentialSuites = hotel.filterRoomByType('residential suite');
-    expect(singleRooms).to.deep.equal([rooms[2], rooms[3]]);
-    expect(residentialSuites).to.deep.equal([rooms[0]]);
+    hotel.filterRoomByType('single room');
+    expect(hotel.availableRooms).to.deep.equal([rooms[2], rooms[3]]);
   });
 
-  // it('should be able to determine the percentage of occupied rooms', () => {
-  //   let occupied = hotel.calculateTotalOccupancy('2022/01/10');
-  //   expect(occupied).to.deep.equal('62.50%');
-  // });
-
-  // it('should be able to calculate the total revenue for a chosen day', () => {
-  //   let totalRevenue = hotel.calculateTotalRevenue('2022/01/10');
-  //   expect(totalRevenue).to.deep.equal('$1740.59');
-  // });
+  it('should be able to filter by date regardless of a date being chosen', () => {
+    hotel.filterRoomByType('single room');
+    expect(hotel.availableRooms).to.deep.equal([rooms[2], rooms[3], rooms[4], rooms[6]]);
+  });
 })

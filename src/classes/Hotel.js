@@ -1,7 +1,9 @@
 export default class Hotel {
-  constructor(roomsData, bookingsData) {
-    this.rooms = roomsData;;
-    this.bookings = bookingsData;
+  constructor(rooms, bookings, customers) {
+    this.rooms = rooms;
+    this.bookings = bookings;
+    this.customers = customers;
+    this.currentCustomer = null;
     this.availableRooms = [];
   }
 
