@@ -1,5 +1,4 @@
 import {
-  customer,
   hotel, 
   validateUserCredentials,
   determineUserTabEvent,
@@ -45,8 +44,8 @@ const domUpdates = {
 
   showUserInfo() {
     domUpdates.removeClass([navUserInfo], 'hidden');
-    domUpdates.updateInnerText(usernameDisplay, `Username: ${customer.name}`);
-    domUpdates.updateInnerText(userIdDisplay, `User ID: ${customer.id}`);
+    domUpdates.updateInnerText(usernameDisplay, `Username: ${hotel.currentCustomer.name}`);
+    domUpdates.updateInnerText(userIdDisplay, `User ID: ${hotel.currentCustomer.id}`);
   },
 
   toggleBillingButton() {
@@ -75,9 +74,9 @@ const domUpdates = {
     if (!customerBillingInfoButton.classList.contains('button-tab-clicked')) {
       domUpdates.toggleBillingButton();
       domUpdates.populateDashBoardInnerHTML();
-      customer.getCustomerBookings(hotel.bookings);
-      customer.getTotalCustomerAmountSpent(hotel.rooms);
-      domUpdates.populateRightColumnWithChartHead(customer.bookings);
+      hotel.currentCustomer.getCustomerBookings(hotel.bookings);
+      hotel.currentCustomer.getTotalCustomerAmountSpent(hotel.rooms);
+      domUpdates.populateRightColumnWithChartHead(hotel.currentCustomer.bookings);
       domUpdates.populateRightColumnWithTotalCost();
     } else {
       domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
@@ -89,8 +88,8 @@ const domUpdates = {
     if (!customerCurrentBookingsButton.classList.contains('button-tab-clicked')) {
       domUpdates.toggleBookingsButton();
       domUpdates.populateDashBoardInnerHTML();
-      customer.getCustomerBookings(hotel.bookings);
-      domUpdates.displayCenterWithBookingsButtons(customer.bookings);
+      hotel.currentCustomer.getCustomerBookings(hotel.bookings);
+      domUpdates.displayCenterWithBookingsButtons(hotel.currentCustomer.bookings);
     } else {
       domUpdates.removeClass([customerCurrentBookingsButton], 'button-tab-clicked');
       domUpdates.resetDashboard();
@@ -332,7 +331,7 @@ const domUpdates = {
   populateRightColumnWithTotalCost() {
     dashboardRightColumn.innerHTML = `
     <h2 class="total-bill-headline">Your total bill for all bookings, past and present at the Overlook Hotel is:</h2>
-    <h3 class="total-bill-amount">$${customer.totalSpent.toFixed(2)}</h3>
+    <h3 class="total-bill-amount">$${hotel.currentCustomer.totalSpent.toFixed(2)}</h3>
     <div>
       <p class="total-bill-message">Thank you for your patronage.</p>
       <p class="total-bill-message">We look forward to seeing you again soon!</p>
