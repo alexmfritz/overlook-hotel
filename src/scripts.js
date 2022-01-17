@@ -12,9 +12,6 @@ import Room from './classes/Room';
 import Booking from './classes/Booking';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
-
-// let allCustomers;
-// let customer;
 let hotel;
 
 function completeCustomerBooking(date, roomNumber, event) {
@@ -65,10 +62,6 @@ function createNewSingleUser(singleCustomer) {
   hotel.currentCustomer = new Customer(singleCustomer);
   domUpdates.showUserInfo();
 }
-
-// function getAllCustomersData(data) {
-//   createAllCustomersData(data[2].customers);
-// }
 
 function loadAllData(data) {
   let rooms = createAllRoomsData(data);
