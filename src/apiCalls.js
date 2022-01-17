@@ -23,13 +23,7 @@ function postNewBooking(bookingObj) {
       'Content-Type': 'application/json'
     }
   })
-  .then(response => {
-    if(!response.ok) {
-      console.log(response.json())
-      throw response
-    }
-    return response.json()
-  })
+  .then(response => checkForError(response))
 }
 
 export { 
@@ -38,6 +32,7 @@ export {
   allRoomsData, 
   fetchSingleCustomer, 
   postNewBooking,
+  fetchData
 };
 
 // export default fetchAllCustomer = () => {
