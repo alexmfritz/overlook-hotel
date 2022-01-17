@@ -267,7 +267,7 @@ const domUpdates = {
     } else if (event.target.classList.contains('customer-book-room-button')) {
       let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
       let customerDateInput = document.getElementById('customerDateInput');
-      let date = customerDateInput.value.split('-').join('/');
+      let date = customerDateInput.value.replaceAll('-', '/');
       completeCustomerBooking(date, selectedRoom.number, event)
     }
   },
@@ -283,7 +283,7 @@ const domUpdates = {
   filterByCalendarDateInput() {
     hotel.availableRooms = [];
     let customerDateInput = document.getElementById('customerDateInput');
-    let date = customerDateInput.value.split('-').join('/');
+    let date = customerDateInput.value.replaceAll('-', '/');
     let today = getTodaysDate();
     if (date < today) {
       domUpdates.invalidDateMessage();
@@ -318,7 +318,7 @@ const domUpdates = {
     dashboardLeftColumn.innerHTML = `
     <section class="customer-date-input-wrapper">
       <label for="customerDateInput">Pick a date:</label>
-      <input class="customer-date-input" id="customerDateInput" type="date" min="2022-01-01" max="2025-12-31">
+      <input class="customer-date-input" id="customerDateInput" type="date">
       <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search Room By Date</button>
       <label for="customerTypeInput">Pick a room type:</label>
       <input class="customer-date-input" id="customerTypeInput" placeholder="ex: single room">
@@ -326,6 +326,8 @@ const domUpdates = {
       <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
     </section>
     `;
+    let customerDateInput = document.getElementById('customerDateInput');
+    customerDateInput.min = getTodaysDate().replaceAll('/', '-');
   },
 
   populateRightColumnWithTotalCost() {
@@ -376,7 +378,6 @@ const domUpdates = {
       </tr>
       `;
   }
-
 };
 
 const querySelectors = {

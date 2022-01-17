@@ -61,14 +61,4 @@ describe('Customer', () => {
     customerTwo.getTotalCustomerAmountSpent(rooms);
     expect(customerTwo.totalSpent).to.deep.equal(231.46);
   });
-
-  it('should have a username unique to the id of the user', () => {
-    expect(customerOne.username).to.be.a('string');
-    expect(customerOne.username).to.deep.equal('username02')
-  });
-
-  it('should have a password associated with the user account', () => {
-    expect(customerOne.password).to.be.a('string');
-    expect(customerOne.password).to.deep.equal('overlook2022');
-  });
 });
