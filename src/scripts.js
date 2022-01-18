@@ -90,7 +90,6 @@ function validateUserCredentials() {
   let loginUsername = document.getElementById('loginUsername');
   let loginPassword = document.getElementById('loginPassword');
   let userID = getIDForCustomer(loginUsername);
-  console.log(userID)
   if (!validateUsername(loginUsername, userID) || !validatePassword(loginPassword)) {
       domUpdates.invalidLoginMessage();
   } else {
@@ -113,7 +112,7 @@ function getIDForCustomer(username) {
 }
 
 function validateUsername(usernameInput, id) {
-  return (usernameInput.value.slice(0, 8) === 'username') && 
+  return (usernameInput.value.slice(0, 8) === 'customer') && 
   (usernameInput.value.length === 10) &&
   (0 < id  && id < 51) ? true : false;
 }
