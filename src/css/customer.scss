@@ -116,7 +116,7 @@
 
 .customer-book-room-button {
   @include height-width(25px, 30%);
-  @include button-tabs($bluerum);
+  @include button-tabs("");
   font-size: 14px;
   color: $blackrum;
 }
