@@ -14,6 +14,7 @@ import './images/single-room.png';
 import { hotelPics } from './data/hotel-pics';
 import Room from './classes/Room';
 import Booking from './classes/Booking';
+const loginPassword = document.getElementById('loginPassword');
 const loginButton = document.getElementById('loginButton');
 const loginDisplay = document.getElementById('loginDisplay');
 const customerDisplay = document.getElementById('customerDisplay');
@@ -431,16 +432,22 @@ const domUpdates = {
 };
 
 const querySelectors = {
+  loginPassword,
   loginErrorMessage,
   customerDashboard
 };
 
-loginButton.addEventListener('click', validateUserCredentials);
-customerDisplay.addEventListener('click', (e) => {
-  determineUserTabEvent(e);
+loginPassword.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    validateUserCredentials();
+  }
 });
-customerDashboard.addEventListener('click', (e) => {
-  domUpdates.determineColumnEvents(e);
+loginButton.addEventListener('click', validateUserCredentials);
+customerDisplay.addEventListener('click', (event) => {
+  determineUserTabEvent(event);
+});
+customerDashboard.addEventListener('click', (event) => {
+  domUpdates.determineColumnEvents(event);
 });
 
 export { 
