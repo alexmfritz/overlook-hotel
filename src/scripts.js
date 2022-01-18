@@ -158,6 +158,13 @@ function separator(numb) {
   return str.join(".");
 }
 
+function sortDate(date) {
+  let mm = date.slice(5, 7);
+  let dd = date.slice(8, 10);
+  let yyyy = date.slice(0, 4);
+  return mm + '/' + dd + '/' + yyyy;
+}
+
 export { 
   hotel,
   validateUserCredentials,
@@ -167,5 +174,6 @@ export {
   determineBookingTime,
   completeCustomerBooking,
   getTodaysDate,
-  separator
+  separator,
+  sortDate
 };
