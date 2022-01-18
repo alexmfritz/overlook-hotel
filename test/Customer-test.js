@@ -46,6 +46,13 @@ describe('Customer', () => {
     expect(customerTwo.bookings).to.deep.equal([bookings[0]]);
   });
 
+  it('should have have no bookings if the customer has not made any', () => {
+    let badCustomer = new Customer(customerTestData[6]);
+    badCustomer.getCustomerBookings(bookings);
+    expect(badCustomer.bookings.length).to.deep.equal(0);
+    expect(badCustomer.bookings).to.deep.equal([]);
+  });
+
   it('should be able to keep track of their total amount spent on bookings', () => {
     expect(customerOne).to.haveOwnProperty('totalSpent');
   });

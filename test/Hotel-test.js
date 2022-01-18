@@ -40,7 +40,7 @@ describe('Hotel', () => {
 
   it('should be able to keep track of all the customers who have interacted with the hotel', () => {
     expect(hotel.customers).to.be.an('Array');
-    expect(hotel.customers.length).to.deep.equal(6);
+    expect(hotel.customers.length).to.deep.equal(7);
   });
 
   it('should be able to keep track of the current customer with no customer by default', () => {
@@ -72,4 +72,4 @@ describe('Hotel', () => {
     hotel.filterRoomByType('single room');
     expect(hotel.availableRooms).to.deep.equal([rooms[2], rooms[3], rooms[4], rooms[6]]);
   });
-})
+});
