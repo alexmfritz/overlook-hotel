@@ -26,8 +26,8 @@ function completeCustomerBooking(date, roomNumber, event) {
 
 function updateCustomer(date, event) {
   hotel.currentCustomer.getCustomerBookings(hotel.bookings);
-  domUpdates.informCustomerOfBookedRoom(event);
   hotel.filterAllAvailableRooms(date);
+  domUpdates.informCustomerOfBookedRoom(event);
   domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
 }
 
@@ -89,23 +89,31 @@ function displayFetchErrorMessage(error) {
 function validateUserCredentials() {
   let loginUsername = document.getElementById('loginUsername');
   let loginPassword = document.getElementById('loginPassword');
-  let userID = loginUsername.value.substring(8, 10);
-  if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
+  let userID = getIDForCustomer(loginUsername);
+  console.log(userID)
+  if (!validateUsername(loginUsername, userID) || !validatePassword(loginPassword)) {
       domUpdates.invalidLoginMessage();
   } else {
       getAllData().then(data => {
         domUpdates.showUserDashboard();
         getSingleCustomerData(userID)
         .then(data => createNewSingleUser(data))
-        .catch(error => displayFetchErrorMessage(error))
-      });
+      }).catch(error => displayFetchErrorMessage(error));
     }
 }
 
-function validateUsername(usernameInput) {
-  let id = usernameInput.value.slice(8, 10);
-  return usernameInput.value.slice(0, 8) === 'username' && 
-  usernameInput.value.length === 10 &&
+function getIDForCustomer(username) {
+  let id = username.value.slice(8, 10);
+  if ((parseInt(id) < 10) && (id.slice(0, 1) === '0')) {
+    return parseInt(id.slice(1, 2));
+  } else if (parseInt(id) > 9) {
+    return parseInt(id);
+  }
+}
+
+function validateUsername(usernameInput, id) {
+  return (usernameInput.value.slice(0, 8) === 'username') && 
+  (usernameInput.value.length === 10) &&
   (0 < id  && id < 51) ? true : false;
 }
 
