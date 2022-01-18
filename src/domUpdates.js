@@ -1,10 +1,11 @@
 import {
   hotel, 
-  validateUserCredentials,
+  // validateUserCredentials,
   determineUserTabEvent,
   determineBookingTime,
   completeCustomerBooking,
-  getTodaysDate
+  getTodaysDate,
+  startSite
 } from "./scripts";
 import './images/residential-suite.png';
 import './images/junior-suite.png';
@@ -405,7 +406,8 @@ const querySelectors = {
   customerDashboard
 };
 
-loginButton.addEventListener('click', validateUserCredentials);
+window.addEventListener('load', startSite);
+// loginButton.addEventListener('click', validateUserCredentials);
 customerDisplay.addEventListener('click', (e) => {
   determineUserTabEvent(e);
 });
