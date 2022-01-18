@@ -4,7 +4,8 @@ import {
   determineUserTabEvent,
   determineBookingTime,
   completeCustomerBooking,
-  getTodaysDate
+  getTodaysDate,
+  separator
 } from "./scripts";
 import './images/residential-suite.png';
 import './images/junior-suite.png';
@@ -126,12 +127,12 @@ const domUpdates = {
     let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
     let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selectedRoom.roomType)
     dashboardRightColumn.innerHTML = `
-    <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
-    <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
-    <section class="customer-single-booking-info">
-      <h3>Booking ID: ${selection.id.toUpperCase()}</h3>
-      <h3>Price: $${selectedRoom.costPerNight}/night</h3>
-    </section>
+      <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
+      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
+      <section class="customer-single-booking-info">
+        <h3>Booking ID: ${selection.id.toUpperCase()}</h3>
+        <h3>Price: $${selectedRoom.costPerNight}/night</h3>
+      </section>
     `;
   },
 
@@ -146,15 +147,15 @@ const domUpdates = {
     let bidet = selection.bidet ? 'yes' : 'no';
     let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selection.roomType);
     dashboardRightColumn.innerHTML = `
-    <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
-    <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
-    <section class="customer-single-booking-info">
-      <h3>Features: ${selection.numBeds}x ${bedSize}</h3>
-      <h3>Bidet: ${bidet}</h3>
-      <h3>Price: $${selection.costPerNight}/night</h3>
-    </section>
-    <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
-    </section>
+      <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
+      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
+      <section class="customer-single-booking-info">
+        <h3>Features: ${selection.numBeds}x ${bedSize}</h3>
+        <h3>Bidet: ${bidet}</h3>
+        <h3>Price: $${selection.costPerNight}/night</h3>
+      </section>
+      <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
+      </section>
     `;
   },
 
@@ -168,22 +169,22 @@ const domUpdates = {
 
   populateBookingButton(element, selection) {
     element.innerHTML = `
-    <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
-    <p id="successfulBookingMessage"></p>
+      <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
+      <p id="successfulBookingMessage"></p>
     `;
   },
 
   resetDashboard() {
     customerDashboard.innerHTML = `
-    <h2 class="welcome-message" id="informationDisplay">Welcome to your Dashboard!</h2>
+      <h2 class="welcome-message" id="informationDisplay">Welcome to your Dashboard!</h2>
     `;
   },
 
   populateDashBoardInnerHTML() {
     customerDashboard.innerHTML = `
-    <section class="customer-new-bookings-date" id="dashboardLeftColumn"></section>
-    <section class="customer-new-bookings-wrapper" id="dashboardCenterColumn"></section>
-    <section class="customer-new-bookings-wrapper right-column pop-in" id="dashboardRightColumn"></section>
+      <section class="customer-new-bookings-date" id="dashboardLeftColumn"></section>
+      <section class="customer-new-bookings-wrapper" id="dashboardCenterColumn"></section>
+      <section class="customer-new-bookings-wrapper right-column pop-in" id="dashboardRightColumn"></section>
     `;
     dashboardLeftColumn = document.getElementById('dashboardLeftColumn');
     dashboardCenterColumn = document.getElementById('dashboardCenterColumn');
@@ -202,19 +203,19 @@ const domUpdates = {
 
   populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType) {
     dashboardCenterColumn.innerHTML += `
-        <section class="flip-card scale-in">
-          <button class="flip-card-inner customer-small-room-info display-booking" id="${booking.roomNumber}">
-            <div class="flip-card-front display-booking" id="${booking.roomNumber}">
-              <h3 class="display-booking" id="${booking.roomNumber}">${itinerary}</h3>
-              <h3 class="display-booking" id="${booking.roomNumber}">${booking.date}</h3>
-            </div>
-            <div class=" flip-card-back display-booking" id="${booking.roomNumber}">
-              <h3 class="display-booking" id="${booking.roomNumber}">${roomType}</h3>
-              <h3 class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}/night</h3>
-            </div>
-          </button>
-        </section>
-      `;
+      <section class="flip-card scale-in">
+        <button class="flip-card-inner customer-small-room-info display-booking" id="${booking.roomNumber}">
+          <div class="flip-card-front display-booking" id="${booking.roomNumber}">
+            <h3 class="display-booking" id="${booking.roomNumber}">${itinerary}</h3>
+            <h3 class="display-booking" id="${booking.roomNumber}">${booking.date}</h3>
+          </div>
+          <div class=" flip-card-back display-booking" id="${booking.roomNumber}">
+            <h3 class="display-booking" id="${booking.roomNumber}">${roomType}</h3>
+            <h3 class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}/night</h3>
+          </div>
+        </button>
+      </section>
+    `;
   },
 
   displayCenterWithRoomsButtons(rooms) {
@@ -228,7 +229,7 @@ const domUpdates = {
   populateApologyMessage() {
     dashboardCenterColumn.innerHTML = `
       <h2>We are so, so, so, so, SO SORRY there are no rooms available for this date!</h2>
-      `;
+    `;
   },
 
   populateCenterWithRoomButtons(rooms) {
@@ -236,14 +237,14 @@ const domUpdates = {
       rooms.forEach(room => {
         let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
         dashboardCenterColumn.innerHTML += `
-        <button class="customer-small-room-info display-room scale-in heartbeat" id=${room.number}>
-          <section class="small-room-info display-room" id=${room.number}> 
-            <p class="display-room" id=${room.number}>Room ${room.number}</p>
-            <p class="display-room" id=${room.number}>${roomType}</p>
-            <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
-          </section>
-        </button>
-        `
+          <button class="customer-small-room-info display-room scale-in heartbeat" id=${room.number}>
+            <section class="small-room-info display-room" id=${room.number}> 
+              <p class="display-room" id=${room.number}>Room ${room.number}</p>
+              <p class="display-room" id=${room.number}>${roomType}</p>
+              <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
+            </section>
+          </button>
+        `;
       });
   },
 
@@ -278,8 +279,15 @@ const domUpdates = {
       let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
       let customerDateInput = document.getElementById('customerDateInput');
       let date = customerDateInput.value.replaceAll('-', '/');
-      completeCustomerBooking(date, selectedRoom.number, event)
+      completeCustomerBooking(date, selectedRoom.number, event);
+      domUpdates.resetRoomDisplayAfterBooking();
     }
+  },
+
+  resetRoomDisplayAfterBooking() {
+    setTimeout(() => {
+      dashboardRightColumn.innerHTML = '';
+    }, 3000)
   },
 
   informCustomerOfBookedRoom(event) {
@@ -326,21 +334,19 @@ const domUpdates = {
 
   populateLeftColumnWithCalendar() {
     dashboardLeftColumn.innerHTML = `
-    <section class="customer-date-input-wrapper">
-    <div class="input-box">
-      <label for="customerDateInput">Pick a date:</label>
-      <input class="customer-date-input" id="customerDateInput" type="date">
+      <div class="input-box">
+        <label for="customerDateInput">Pick a date:</label>
+        <input id="customerDateInput" type="date">
+      </div>
       <button class="customer-date-search-button" id="customerDateInputSubmitButton">Search By Date</button>
-    </div>
-    <div class="input-box">
-      <label for="customerTypeInput">Pick a room type:</label>
-      <input class="customer-date-input" id="customerTypeInput" placeholder="ex: single room">
+      <div class="input-box">
+        <label for="customerTypeInput">Pick a room:</label>
+        <input id="customerTypeInput" placeholder="ex: single room">
+      </div>
       <button class="customer-date-search-button" id="customerTypeInputSubmitButton">Search By Type</button>
-    </div>
-    <div class="input-box">
-      <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
-    </div>
-      </section>
+      <div class="input-box">
+        <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
+      </div>
     `;
     domUpdates.setCalendarDate();
   },
@@ -351,30 +357,31 @@ const domUpdates = {
   },
 
   populateRightColumnWithTotalCost() {
+    let number = separator(hotel.currentCustomer.totalSpent);
     dashboardRightColumn.innerHTML = `
-    <h2 class="total-bill-headline">Your total bill for all bookings, past and present at the Overlook Hotel is:</h2>
-    <h3 class="total-bill-amount">$${hotel.currentCustomer.totalSpent.toFixed(2)}</h3>
-    <div>
-      <p class="total-bill-message">Thank you for your patronage.</p>
-      <p class="total-bill-message">We look forward to seeing you again soon!</p>
-    </div>
+      <h2 class="total-bill-headline">Your total bill for all bookings, past and present at the Overlook Hotel is:</h2>
+      <h3 class="total-bill-amount grow">$${number}</h3>
+      <div>
+        <p class="total-bill-message">Thank you for your patronage.</p>
+        <p class="total-bill-message">We look forward to seeing you again soon!</p>
+      </div>
     `;
   },
 
   populateRightColumnWithChartHead(bookingsData) {  
     dashboardCenterColumn.innerHTML = `
-    <table class="scrolling"> 
-      <caption>Booking Costs</caption>
-      <thead>
+      <table class="scrolling"> 
+        <caption>Booking Costs</caption>
+        <thead>
           <tr>
             <th><u>Room Type</u></th>
             <th><u>Booking Date</u></th>
             <th><u>Nightly Cost</u></th>
           </tr>
-      </thead>
-      <tbody id="totalCostTableBody">
-      </tbody>
-    </table>
+        </thead>
+        <tbody id="totalCostTableBody">
+        </tbody>
+      </table>
     `;
     totalCostTableBody = document.getElementById('totalCostTableBody');
     domUpdates.displayTotalCostChart(bookingsData, totalCostTableBody);
@@ -396,7 +403,7 @@ const domUpdates = {
         <td>${booking.date}</td>
         <td>$${bookedRoom.costPerNight}</td>
       </tr>
-      `;
+    `;
   }
 };
 

@@ -11,8 +11,8 @@
     <main>
       <header>
         <nav>
-          <h1 class="nav-title">OVERLOOK HOTEL</h1>
-          <section class="nav-user-info hidden" id="navUserInfo">
+          <h1 class="nav-title bounce">OVERLOOK HOTEL</h1>
+          <section class="nav-user-info bounce hidden" id="navUserInfo">
             <h2 id="usernameDisplay">Alex Fritz</h2>
             <h2 id="userIdDisplay">USER ID: 9382</h2>
           </section>
@@ -20,29 +20,29 @@
       </header>
       <section class="login-display" id="loginDisplay">
         <section class="login-information">
-          <h2>Outlook Hotel Login Page</h2>
-          <section class="login-input-field">
+          <h2 class="expand">Outlook Hotel Login Page</h2>
+          <section class="login-input-field expand">
             <section class="login-input-row">
               <label for="loginUsername">Username</label>
-              <input class="login-username-input" id="loginUsername" placeholder="ex: username50" type="text" maxlength="10">
+              <input id="loginUsername" placeholder="ex: username50" type="text" maxlength="10">
             </section>
             <section class="login-input-row">
-              <label for="loginPassword">Password</label>
-              <input class="login-password-input" id="loginPassword" type="password" placeholder="ex: password50" maxlength="12">
+              <label  for="loginPassword">Password</label>
+              <input id="loginPassword" type="password" placeholder="ex: password50" maxlength="12">
             </section>
           </section>
-          <button class="login-button" id="loginButton">Login</button>
+          <button class="login-button expand" id="loginButton">Login</button>
           <p id="loginErrorMessage"></p>
         </section>
       </section>
       <section class="customer-display hidden" id="customerDisplay">
         <section class="customer-button-row">
-          <button class="button-tab" id="customerNewBookingsButton">Book New</button>
-          <button class="button-tab" id="customerCurrentBookingsButton">Customer Bookings</button>
-          <button class="button-tab" id="customerBillingInfoButton">Total Bill</button>
+          <button class="button-tab vibrate" id="customerNewBookingsButton">Book New</button>
+          <button class="button-tab vibrate" id="customerCurrentBookingsButton">Customer Bookings</button>
+          <button class="button-tab vibrate" id="customerBillingInfoButton">Total Bill</button>
         </section>
         <section class="customer-information" id="customerDashboard">
-          <h2 class="welcome-message" id="informationDisplay">Welcome to your Dashboard!</h2>
+          <h2 class="welcome-message blast" id="informationDisplay">Welcome to your Dashboard!</h2>
         </section>
       </section>
     </main>
