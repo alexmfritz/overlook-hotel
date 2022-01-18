@@ -15,6 +15,10 @@ html, body {
   @include height-width(100%);
 }
 
+header {
+  @include button-tabs("");
+}
+
 body::-webkit-scrollbar {
   display: none;
 }
@@ -56,19 +60,26 @@ td {
   font-size: 18px;
 }
 
+input {
+  @include button-tabs("");
+}
+
+button {
+  @include button-tabs("");
+}
+
 .customer-display,
-.manager-display,
 .login-display {
+  @include height-width(55%, 70%);
   position: relative;
   top: 15%;
   left: 15%;
-  @include height-width(55%, 70%);
 }
 
 .button-tab {
-  font-size: 18px;
   @include height-width(50px, 20%);
   @include button-tabs($redrum);
+  font-size: 18px;
 }
 
 .button-tab:hover {
@@ -77,13 +88,14 @@ td {
 
 .button-tab-clicked {
   background-color: $redrum-hover;
-  border: 5px solid $pinkrum;
+  border: 3px solid $bluerum;
 }
 
 .customer-information,
 .login-information {
-  background: $redrum;
   @include height-width(100%, 100%);
+  @include button-tabs("");
+  background: $redrum;
 }
 
 .hidden {

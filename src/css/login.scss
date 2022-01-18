@@ -10,31 +10,30 @@
 }
 
 .login-input-field {
+  @include height-width(150px);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  @include height-width(150px);
 }
 
 .login-input-row {
+  @include height-width("", 350px);
   display: flex;
   justify-content: space-evenly;
-  @include height-width("", 350px);
 }
 
 .login-username-input,
 .login-password-input {
-  color: $blackrum;
   @include height-width(25px, 150px);
+  color: $blackrum;
 }
 
 .login-button {
+  @include height-width(25px, 150px);
   font-size: 18px;
   color: $blackrum;
-  @include height-width(25px, 150px);
-  @include button-tabs($whiterum);
 }
 
 .login-button:hover {
-  background-color: $pinkrum;
+  background-color: $bluerum;
 }
