@@ -1,0 +1,62 @@
+.customer-small-room-info {
+  @include button-tabs($bluerum);
+  @include height-width(85px, 90%);
+  @include top-bot-marg(8px, 8px);
+  @include flexbox-row(space-evenly);
+  min-height: 85px;
+}
+
+.customer-small-room-info>p {
+  font-size: 16px;
+}
+
+.small-room-info-left {
+  text-align: left;
+}
+
+.small-room-info-right {
+  text-align: right;
+}
+
+.small-room-info {
+  @include height-width("", 100%);
+  @include flexbox-row(space-evenly);
+}
+
+.flip-card {
+  @include height-width(100%, 100%);
+  @include top-bot-marg(10px, 10px);
+  background-color: transparent;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  @include height-width(100%, 100%);
+  position: relative;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  @include flexbox-row(space-evenly);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front>h3,
+.flip-card-back>h3 {
+  font-size: 23px;
+}

@@ -1,0 +1,50 @@
+.right-column {
+  @include flexbox-column(space-evenly);
+}
+
+.customer-single-booking-title {
+  @include height-width(20%, 100%);
+  font-size: 22px;
+  text-align: center;
+}
+
+.customer-single-booking-info,
+.customer-single-booking-submit {
+  @include height-width(40%, 100%);
+  font-size: 20px;
+  @include flexbox-column("");
+}
+
+.customer-single-booking-info>h3 {
+  @include top-bot-marg(5px, 5px);
+}
+
+.customer-book-room-button {
+  @include height-width(25px, 30%);
+  @include button-tabs($bluerum);
+  font-size: 14px;
+  color: $blackrum;
+}
+
+.customer-book-room-button:hover {
+  background-color: $bluerum;
+}
+
+.total-bill-headline {
+  font-size: 28px;
+}
+
+.total-bill-amount {
+  font-size: 24px;
+}
+
+.total-bill-message {
+  font-size: 20px;
+}
+
+.room-image {
+  min-height: 55%;
+  max-height: 80%;
+  max-height: 55%;
+  max-width: 80%;
+}

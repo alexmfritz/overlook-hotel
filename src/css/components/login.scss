@@ -3,23 +3,17 @@
 }
 
 .login-information {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  @include flexbox-column(space-evenly);
 }
 
 .login-input-field {
   @include height-width(150px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  @include flexbox-column(space-around);
 }
 
 .login-input-row {
   @include height-width("", 350px);
-  display: flex;
-  justify-content: space-evenly;
+  @include flexbox-row(space-evenly);
 }
 
 .login-username-input,

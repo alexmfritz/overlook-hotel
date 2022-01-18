@@ -1,0 +1,22 @@
+.customer-new-bookings-date {
+  @include height-width(80%, 15%);
+  @include flexbox-column(center);
+}
+
+.customer-date-input-wrapper,
+.input-box {
+  @include height-width(200px, 90%);
+  @include top-bot-marg(5px, 5px);
+  @include flexbox-column(space-evenly);
+}
+
+.customer-date-search-button:hover {
+  background-color: $bluerum;
+}
+
+.customer-date-search-button {
+  @include height-width(25px, 100%);
+  @include button-tabs($whiterum);
+  font-size: 14px;
+  color: $blackrum;
+}

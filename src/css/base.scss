@@ -1,11 +1,16 @@
-/* This is an example of how to import a partial scss file*/
-@import '_variables';
-@import '_mixins';
-@import '_reset';
-@import '_keyframes';
-@import 'header';
-@import 'login';
-@import 'customer';
+@import './partials/_variables';
+@import './partials/_reset';
+@import './partials/_keyframes';
+@import './partials/_animations';
+@import './partials/design';
+@import './partials/layout';
+@import './partials/spacing';
+@import './components/header';
+@import './components/login';
+@import './components/customer';
+@import './components/search.scss';
+@import './components/cards';
+@import './components/billing.scss';
 
 * {
   color: $whiterum;
@@ -35,10 +40,6 @@ main {
   @include height-width(100%);
 }
 
-button {
-  cursor: pointer;
-}
-
 table {
   @include height-width("", 100%);
 }
@@ -62,40 +63,24 @@ td {
 
 input {
   @include button-tabs("");
+  @include height-width(30px, 150px);
+  color: $blackrum;
+}
+
+input:hover {
+  background-color: $greyrum;
 }
 
 button {
   @include button-tabs("");
 }
 
-.customer-display,
-.login-display {
-  @include height-width(55%, 70%);
-  position: relative;
-  top: 15%;
-  left: 15%;
+input, button {
+  cursor: pointer;
 }
 
-.button-tab {
-  @include height-width(50px, 20%);
-  @include button-tabs($redrum);
-  font-size: 18px;
-}
-
-.button-tab:hover {
-  background-color: $redrum-hover;
-}
-
-.button-tab-clicked {
-  background-color: $redrum-hover;
-  border: 3px solid $bluerum;
-}
-
-.customer-information,
-.login-information {
-  @include height-width(100%, 100%);
-  @include button-tabs("");
-  background: $redrum;
+label {
+  font-size: 22px;
 }
 
 .hidden {

@@ -1,0 +1,8 @@
+@import '_variables';
+
+@mixin button-tabs($color:"") {
+  background-color: $color;
+  border-radius: 5px;
+  border: 1px solid $blackrum;
+  box-shadow: $boxshadow;
+}
