@@ -184,7 +184,7 @@ const domUpdates = {
     customerDashboard.innerHTML = `
       <section class="customer-new-bookings-date" id="dashboardLeftColumn"></section>
       <section class="customer-new-bookings-wrapper" id="dashboardCenterColumn"></section>
-      <section class="customer-new-bookings-wrapper right-column pop-in" id="dashboardRightColumn"></section>
+      <section class="customer-new-bookings-wrapper right-column pop-in" id="dashboardRightColumn" tabindex="0"></section>
     `;
     dashboardLeftColumn = document.getElementById('dashboardLeftColumn');
     dashboardCenterColumn = document.getElementById('dashboardCenterColumn');
@@ -348,11 +348,34 @@ const domUpdates = {
         <button class="customer-date-search-button" id="customerClearInputSearchButton" id="customerClearInputSubmitButton">Clear Search</button>
       </div>
     `;
-    domUpdates.setCalendarDate();
+    let customerDateInput = document.getElementById('customerDateInput');
+    let customerTypeInput = document.getElementById('customerDateInput');
+    domUpdates.setCalendarDate(customerDateInput);
+    domUpdates.createSearchEventListeners(customerDateInput, customerTypeInput);
   },
 
-  setCalendarDate() {
-    let customerDateInput = document.getElementById('customerDateInput');
+  createSearchEventListeners(customerDateInput, customerTypeInput) {
+    domUpdates.createCalendarEventListener(customerDateInput);
+    domUpdates.createRoomTypeInputEventListener(customerTypeInput);
+  },
+
+  createCalendarEventListener(customerDateInput) {
+    customerDateInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        domUpdates.filterByCalendarDateInput();
+      }
+    })
+  },
+
+  createRoomTypeInputEventListener(customerTypeInput) {
+    customerTypeInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        domUpdates.filterByRoomTypeInput();
+      }
+    })
+  },
+
+  setCalendarDate(customerDateInput) {
     customerDateInput.min = getTodaysDate().replaceAll('/', '-');
   },
 
@@ -370,7 +393,7 @@ const domUpdates = {
 
   populateRightColumnWithChartHead(bookingsData) {  
     dashboardCenterColumn.innerHTML = `
-      <table class="scrolling"> 
+      <table class="scrolling" tabindex="0"> 
         <caption>Booking Costs</caption>
         <thead>
           <tr>
