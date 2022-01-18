@@ -20,7 +20,7 @@ export default class Customer {
           totalPrice += room.costPerNight;
         }
       })
-      return totalPrice;
+      return parseFloat(totalPrice.toFixed(2));
     }, 0);
   }
 
