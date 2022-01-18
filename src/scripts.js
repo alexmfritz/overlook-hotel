@@ -88,9 +88,8 @@ function displayFetchErrorMessage(error) {
 
 function validateUserCredentials() {
   let loginUsername = document.getElementById('loginUsername');
-  let loginPassword = document.getElementById('loginPassword');
   let userID = getIDForCustomer(loginUsername);
-  if (!validateUsername(loginUsername, userID) || !validatePassword(loginPassword)) {
+  if (!validateUsername(loginUsername, userID) || !validatePassword(querySelectors.loginPassword)) {
       domUpdates.invalidLoginMessage();
   } else {
       getAllData().then(data => {
