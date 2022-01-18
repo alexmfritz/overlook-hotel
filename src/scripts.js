@@ -14,6 +14,10 @@ import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
 let hotel;
 
+const getRandomIndex = (array) => {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function completeCustomerBooking(date, roomNumber, event) {
   const booking = hotel.currentCustomer.createBooking(date, roomNumber);
   postNewBooking(booking).then(data => {
@@ -58,8 +62,13 @@ function createAllCustomersData(data) {
   return data[2].customers.map(customer => new Customer(customer));
 }
 
-function createNewSingleUser(singleCustomer) {
-  hotel.currentCustomer = new Customer(singleCustomer);
+// function createNewSingleUser(singleCustomer) {
+//   hotel.currentCustomer = new Customer(singleCustomer);
+//   domUpdates.showUserInfo();
+// }
+
+function createNewSingleUser() {
+  hotel.currentCustomer = new Customer(getRandomIndex(hotel.customers));
   domUpdates.showUserInfo();
 }
 
@@ -86,32 +95,40 @@ function displayFetchErrorMessage(error) {
   domUpdates.updateInnerText(querySelectors.customerDashboard, message);
 }
 
-function validateUserCredentials() {
-  let loginUsername = document.getElementById('loginUsername');
-  let loginPassword = document.getElementById('loginPassword');
-  let userID = loginUsername.value.substring(8, 10);
-  if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
-      domUpdates.invalidLoginMessage();
-  } else {
-      getAllData().then(data => {
-        domUpdates.showUserDashboard();
-        getSingleCustomerData(userID)
-        .then(data => createNewSingleUser(data))
-        .catch(error => displayFetchErrorMessage(error))
-      });
-    }
+// function validateUserCredentials() {
+//   let loginUsername = document.getElementById('loginUsername');
+//   let loginPassword = document.getElementById('loginPassword');
+//   let userID = loginUsername.value.substring(8, 10);
+//   if (!validateUsername(loginUsername) || !validatePassword(loginPassword)) {
+//       domUpdates.invalidLoginMessage();
+//   } else {
+//       getAllData().then(data => {
+//         domUpdates.showUserDashboard();
+//         getSingleCustomerData(userID)
+//         .then(data => createNewSingleUser(data))
+//         .catch(error => displayFetchErrorMessage(error))
+//       });
+//     }
+// }
+
+function startSite() {
+  getAllData().then(data => {
+      createNewSingleUser()
+      domUpdates.showUserDashboard()
+  }).catch(error => displayFetchErrorMessage(error))
 }
 
-function validateUsername(usernameInput) {
-  let id = usernameInput.value.slice(8, 10);
-  return usernameInput.value.slice(0, 8) === 'username' && 
-  usernameInput.value.length === 10 &&
-  (0 < id  && id < 51) ? true : false;
-}
 
-function validatePassword(passwordInput) {
-  return passwordInput.value === 'overlook2022' ? true: false;
-}
+// function validateUsername(usernameInput) {
+//   let id = usernameInput.value.slice(8, 10);
+//   return usernameInput.value.slice(0, 8) === 'username' && 
+//   usernameInput.value.length === 10 &&
+//   (0 < id  && id < 51) ? true : false;
+// }
+
+// function validatePassword(passwordInput) {
+//   return passwordInput.value === 'overlook2022' ? true: false;
+// }
 
 function determineUserTabEvent(event) {
   if (event.target.id === 'customerNewBookingsButton') {
@@ -147,11 +164,12 @@ function determineBookingTime(booking) {
 
 export { 
   hotel,
-  validateUserCredentials,
+  // validateUserCredentials,
   checkForError,
   getAllData,
   determineUserTabEvent,
   determineBookingTime,
   completeCustomerBooking,
-  getTodaysDate
+  getTodaysDate,
+  startSite
 };
