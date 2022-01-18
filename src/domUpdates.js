@@ -5,7 +5,8 @@ import {
   determineBookingTime,
   completeCustomerBooking,
   getTodaysDate,
-  separator
+  separator,
+  sortDate
 } from "./scripts";
 import './images/residential-suite.png';
 import './images/junior-suite.png';
@@ -194,6 +195,7 @@ const domUpdates = {
 
   displayCenterWithBookingsButtons(bookingsData) {
     let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    console.log(sortedBookingsData)
     sortedBookingsData.forEach(booking => {
       let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
       let itinerary = determineBookingTime(booking);
@@ -203,12 +205,13 @@ const domUpdates = {
   },
 
   populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType) {
+    let newDate = sortDate(booking.date);
     dashboardCenterColumn.innerHTML += `
       <section class="flip-card scale-in">
         <button class="flip-card-inner customer-small-room-info display-booking" id="${booking.roomNumber}">
           <div class="flip-card-front display-booking" id="${booking.roomNumber}">
             <h3 class="display-booking" id="${booking.roomNumber}">${itinerary}</h3>
-            <h3 class="display-booking" id="${booking.roomNumber}">${booking.date}</h3>
+            <h3 class="display-booking" id="${booking.roomNumber}">${newDate}</h3>
           </div>
           <div class=" flip-card-back display-booking" id="${booking.roomNumber}">
             <h3 class="display-booking" id="${booking.roomNumber}">${roomType}</h3>
@@ -302,15 +305,15 @@ const domUpdates = {
   filterByCalendarDateInput() {
     hotel.availableRooms = [];
     let customerDateInput = document.getElementById('customerDateInput');
-    let date = customerDateInput.value.replaceAll('-', '/');
-    let today = getTodaysDate();
-    if (date < today) {
-      domUpdates.invalidDateMessage();
-      customerDateInput.value = '';
-    } else {
-      hotel.filterAllAvailableRooms(date);
+    let date = sortDate(customerDateInput.value.replaceAll('-', '/'));
+    let today = sortDate(getTodaysDate());
+    if (today <= date) {
+      hotel.filterAllAvailableRooms(customerDateInput.value.replaceAll('-', '/'));
       domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
       domUpdates.resetRightColumn();
+    } else {
+      domUpdates.invalidDateMessage();
+      customerDateInput.value = '';
     }
   },
 
@@ -421,10 +424,11 @@ const domUpdates = {
   },
 
   populateTotalCostChart(tableBody, roomType, booking, bookedRoom) {
+    let newDate = sortDate(booking.date)
     tableBody.innerHTML += `
       <tr>
         <td>${roomType}</td>
-        <td>${booking.date}</td>
+        <td>${newDate}</td>
         <td>$${bookedRoom.costPerNight}</td>
       </tr>
     `;

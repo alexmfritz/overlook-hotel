@@ -19,9 +19,9 @@ export default class Hotel {
 
   filterRoomByType(type) {
     if (!this.availableRooms.length) {
-      this.availableRooms = this.rooms.filter(room => room.roomType === type);
+      this.availableRooms = this.rooms.filter(room => room.roomType.includes(type));
     } else {
-      this.availableRooms = this.availableRooms.filter(room => room.roomType === type);
+      this.availableRooms = this.availableRooms.filter(room => room.roomType.includes(type));
     }
   }
 }
