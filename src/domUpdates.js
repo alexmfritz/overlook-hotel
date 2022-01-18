@@ -202,16 +202,18 @@ const domUpdates = {
 
   populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType) {
     dashboardCenterColumn.innerHTML += `
-        <button class="customer-small-room-info display-booking" id="${booking.roomNumber}">
-          <div class="small-room-info-left display-booking" id="${booking.roomNumber}">
-            <p class="display-booking" id="${booking.roomNumber}">${itinerary}</p>
-            <p class="display-booking" id="${booking.roomNumber}">${booking.date}</p>
-          </div>
-          <div class="small-room-info-right display-booking" id="${booking.roomNumber}">
-            <p class="display-booking" id="${booking.roomNumber}">${roomType}</p>
-            <p class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}/night</p>
-          </div>
-        </button>
+        <section class="flip-card scale-in">
+          <button class="flip-card-inner customer-small-room-info display-booking" id="${booking.roomNumber}">
+            <div class="flip-card-front display-booking" id="${booking.roomNumber}">
+              <h3 class="display-booking" id="${booking.roomNumber}">${itinerary}</h3>
+              <h3 class="display-booking" id="${booking.roomNumber}">${booking.date}</h3>
+            </div>
+            <div class=" flip-card-back display-booking" id="${booking.roomNumber}">
+              <h3 class="display-booking" id="${booking.roomNumber}">${roomType}</h3>
+              <h3 class="display-booking" id="${booking.roomNumber}">$${bookedRoom.costPerNight}/night</h3>
+            </div>
+          </button>
+        </section>
       `;
   },
 
@@ -234,7 +236,7 @@ const domUpdates = {
       rooms.forEach(room => {
         let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
         dashboardCenterColumn.innerHTML += `
-        <button class="customer-small-room-info display-room" id=${room.number}>
+        <button class="customer-small-room-info display-room scale-in heartbeat" id=${room.number}>
           <section class="small-room-info display-room" id=${room.number}> 
             <p class="display-room" id=${room.number}>Room ${room.number}</p>
             <p class="display-room" id=${room.number}>${roomType}</p>

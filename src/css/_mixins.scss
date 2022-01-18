@@ -5,10 +5,11 @@
   width: $width;
 }
 
-@mixin button-tabs($color) {
+@mixin button-tabs($color:"") {
   background-color: $color;
-  border-radius: 3px;
+  border-radius: 5px;
   border: 1px solid $blackrum;
+  box-shadow: $boxshadow;
 }
 
 @mixin right-left-pad($right:"", $left:"") {
