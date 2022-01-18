@@ -1,0 +1,54 @@
+.customer-display,
+.login-display {
+  @include height-width(55%, 70%);
+  position: relative;
+  top: 15%;
+  left: 15%;
+}
+
+.button-tab {
+  @include height-width(50px, 20%);
+  @include button-tabs($redrum);
+  font-size: 18px;
+}
+
+.button-tab:hover {
+  background-color: $bluerum;
+}
+
+.button-tab-clicked {
+  background-color: $bluerum;
+}
+
+.customer-information,
+.login-information {
+  @include height-width(100%, 100%);
+  @include button-tabs("");
+  background: $redrum;
+}
+
+.welcome-message {
+  font-size: 50px;
+}
+
+.customer-button-row {
+  @include height-width("", 100%);
+  @include flexbox-row("");
+}
+
+.customer-information {
+  @include flexbox-row(space-evenly);
+}
+
+.customer-new-bookings-wrapper {
+  @include height-width(80%, 40%);
+  @include flexbox-column("");
+  overflow-y: scroll;
+}
+
+.customer-new-bookings-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+
+

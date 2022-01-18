@@ -1,0 +1,50 @@
+.login-display {
+  -webkit-animation: scale-in-center 2.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-center 2.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.customer-display {
+  -webkit-animation: flicker-in-1 1s linear both;
+  animation: flicker-in-1 1s linear both;
+}
+
+.expand {
+  -webkit-animation: tracking-in-expand-fwd 3s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
+  animation: tracking-in-expand-fwd 3s cubic-bezier(0.215, 0.610, 0.355, 1.000) 1s both;
+}
+
+.vibrate:hover {
+  -webkit-animation: vibrate-1 0.3s linear infinite both;
+  animation: vibrate-1 0.3s linear infinite both;
+}
+
+.blast {
+  -webkit-animation: welcome-message 2s cubic-bezier(0.470, 0.000, 0.745, 0.715) 2s both;
+  animation: welcome-message 2s cubic-bezier(0.470, 0.000, 0.745, 0.715) 2s both;
+}
+
+.heartbeat:hover {
+  -webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+  animation: heartbeat 1.5s ease-in-out infinite both;
+}
+
+.grow {
+  -webkit-animation: grow 1.5s ease-in-out 4s infinite both;
+  animation: grow 1.5s ease-in-out 4s infinite both;
+}
+
+.scrolling {
+  -moz-animation: scroller 2s linear;
+  -webkit-animation: scroller 2s linear;
+  animation: scroller 2s linear;
+}
+
+.pop-in {
+  -webkit-animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
+  animation: pop-up 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 2s both;
+}
+
+.scale-in {
+  -webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}

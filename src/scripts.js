@@ -98,6 +98,7 @@ function validateUserCredentials() {
         domUpdates.showUserDashboard();
         getSingleCustomerData(userID)
         .then(data => createNewSingleUser(data))
+        .catch(error => displayFetchErrorMessage(error));
       }).catch(error => displayFetchErrorMessage(error));
     }
 }
@@ -153,6 +154,12 @@ function determineBookingTime(booking) {
   return response;
 }
 
+function separator(numb) {
+  let str = numb.toString().split(".");
+  str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return str.join(".");
+}
+
 export { 
   hotel,
   validateUserCredentials,
@@ -161,5 +168,6 @@ export {
   determineUserTabEvent,
   determineBookingTime,
   completeCustomerBooking,
-  getTodaysDate
+  getTodaysDate,
+  separator
 };

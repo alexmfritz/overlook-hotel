@@ -13,8 +13,6 @@ header {
 
 .nav-title {
   font-size: 50px;
-  -webkit-animation: bounce 1.2s both;
-  animation: bounce 1.2s both;
 }
 
 .nav-user-info {
@@ -22,4 +20,9 @@ header {
   flex-direction: column;
   text-align: center;
   font-size: 30px;
+}
+
+.bounce {
+  -webkit-animation: bounce 1.2s both;
+  animation: bounce 1.2s both;
 }
