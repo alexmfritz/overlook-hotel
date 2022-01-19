@@ -78,13 +78,67 @@ const domUpdates = {
     }, 1500);
   },
 
+  clearRoomSearchFilters() {
+    let customerDateInput = document.getElementById('customerDateInput');
+    customerDateInput.value = '';
+    hotel.availableRooms = [];
+    domUpdates.displayCenterWithRoomsButtons(hotel.rooms);
+    domUpdates.resetRightColumn();
+  },
+
+  resetRoomDisplayAfterBooking() {
+    setTimeout(() => {
+      dashboardRightColumn.innerHTML = '';
+    }, 3000)
+  },
+
+  resetRightColumn() {
+    dashboardRightColumn.innerHTML = '';
+  },
+
+  determineColumnEvents(event) {
+    if (event.target.classList.contains('customer-date-search-button')) {
+      domUpdates.determineFilteringNewBookingsEvent(event);
+    } else if (event.target.classList.contains('display-booking')) {
+      let selectedBooking = hotel.bookings.find(booking => booking.roomNumber === parseInt(event.target.id));
+      domUpdates.displayRightColumnWithLargeDisplay(selectedBooking);
+    } else if (event.target.classList.contains('display-room')) {
+      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
+      domUpdates.displayRightColumnWithLargeDisplay(selectedRoom);
+    } else if (event.target.classList.contains('customer-book-room-button')) {
+      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
+      let customerDateInput = document.getElementById('customerDateInput');
+      let date = customerDateInput.value.replaceAll('-', '/');
+      completeCustomerBooking(date, selectedRoom.number, event);
+      domUpdates.resetRoomDisplayAfterBooking();
+    }
+  },
+
+  determineFilteringNewBookingsEvent(event) {
+    if (event.target.id === 'customerDateInputSubmitButton') {
+      domUpdates.filterByCalendarDateInput();
+    } else if (event.target.id === 'customerTypeInputSubmitButton') {
+      domUpdates.filterByRoomTypeInput();
+    } else if (event.target.id === 'customerClearInputSearchButton') {
+      domUpdates.clearRoomSearchFilters();
+    }
+  },
+
+  determineIfBookButtonIsNeeded(selection) {
+    let singleBookingSubmitBox = document.getElementById('singleBookingSubmitBox');
+    let customerDateInput = document.getElementById('customerDateInput');
+    if (customerDateInput.value) {
+      domUpdates.populateBookingButton(singleBookingSubmitBox, selection);
+    }
+  },
+
   displayCustomerTotalCost() {
     if (!customerBillingInfoButton.classList.contains('button-tab-clicked')) {
       domUpdates.toggleBillingButton();
       domUpdates.populateDashBoardInnerHTML();
       hotel.currentCustomer.getCustomerBookings(hotel.bookings);
       hotel.currentCustomer.getTotalCustomerAmountSpent(hotel.rooms);
-      domUpdates.populateRightColumnWithChartHead(hotel.currentCustomer.bookings);
+      domUpdates.populateCenterColumnWithChartHead(hotel.currentCustomer.bookings);
       domUpdates.populateRightColumnWithTotalCost();
     } else {
       domUpdates.removeClass([customerBillingInfoButton], 'button-tab-clicked');
@@ -116,26 +170,31 @@ const domUpdates = {
     }
   },
 
-  populateRightColumnWithLargeDisplay(selection) {
+  displayCenterWithBookingsButtons(bookingsData) {
+    let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    console.log(sortedBookingsData)
+    sortedBookingsData.forEach(booking => {
+      let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
+      let itinerary = determineBookingTime(booking);
+      let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
+      domUpdates.populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType);
+    });
+  },
+
+  displayCenterWithRoomsButtons(rooms) {
+    if (!rooms.length) {
+      domUpdates.populateApologyMessage();
+    } else {
+      domUpdates.populateCenterWithRoomButtons(rooms);
+    }
+  },
+
+  displayRightColumnWithLargeDisplay(selection) {
     if (selection instanceof Booking) {
       domUpdates.populateRightColumnWithBookingInfo(selection);
     } else if (selection instanceof Room) {
       domUpdates.displayRightColumnWithRoomInfo(selection);
     }
-  },
-
-  populateRightColumnWithBookingInfo(selection) {
-    let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
-    let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
-    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selectedRoom.roomType)
-    dashboardRightColumn.innerHTML = `
-      <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
-      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
-      <section class="customer-single-booking-info">
-        <h3>Booking ID: ${selection.id.toUpperCase()}</h3>
-        <h3>Price: $${selectedRoom.costPerNight}/night</h3>
-      </section>
-    `;
   },
 
   displayRightColumnWithRoomInfo(selection) {
@@ -145,40 +204,60 @@ const domUpdates = {
     domUpdates.determineIfBookButtonIsNeeded(selection);
   },
 
-  populateRightColumnWithRoomInfo(selection, roomType, bedSize) {
-    let bidet = selection.bidet ? 'yes' : 'no';
-    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selection.roomType);
-    dashboardRightColumn.innerHTML = `
-      <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
-      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
-      <section class="customer-single-booking-info">
-        <h3>Features: ${selection.numBeds}x ${bedSize}</h3>
-        <h3>Bidet: ${bidet}</h3>
-        <h3>Price: $${selection.costPerNight}/night</h3>
-      </section>
-      <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
-      </section>
-    `;
+  displayTotalCostChart(bookingsData, tableBody) {
+    let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    sortedBookingsData.forEach(booking => {
+      let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
+      let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
+      domUpdates.populateTotalCostChart(tableBody, roomType, booking, bookedRoom);
+    });
   },
 
-  determineIfBookButtonIsNeeded(selection) {
-    let singleBookingSubmitBox = document.getElementById('singleBookingSubmitBox');
-    let customerDateInput = document.getElementById('customerDateInput');
-    if (customerDateInput.value) {
-      domUpdates.populateBookingButton(singleBookingSubmitBox, selection);
+  informCustomerOfBookedRoom(event) {
+    if (event.target.classList.contains('customer-book-room-button')) {
+      domUpdates.addClass([event.target], 'hidden');
+      let successMessage = document.getElementById('successfulBookingMessage');
+      successMessage.innerText = "Your room has been booked!";
     }
   },
 
-  populateBookingButton(element, selection) {
-    element.innerHTML = `
-      <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
-      <p id="successfulBookingMessage"></p>
-    `;
+  filterByCalendarDateInput() {
+    hotel.availableRooms = [];
+    let customerDateInput = document.getElementById('customerDateInput');
+    let date = sortDate(customerDateInput.value.replaceAll('-', '/'));
+    let today = sortDate(getTodaysDate());
+    if (date >= today) {
+      hotel.filterAllAvailableRooms(customerDateInput.value);
+      domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
+      domUpdates.resetRightColumn();
+    } else {
+      domUpdates.invalidDateMessage();
+      customerDateInput.value = '';
+    }
+  },
+
+  filterByRoomTypeInput() {
+    let customerRoomTypeInput = document.getElementById('customerTypeInput');
+    let roomType = customerRoomTypeInput.value.toLowerCase();
+    hotel.filterRoomByType(roomType);
+    domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
+    domUpdates.resetRightColumn();
+    customerRoomTypeInput.value = '';
+  },
+
+  setCalendarDate(customerDateInput) {
+    customerDateInput.min = getTodaysDate().replaceAll('/', '-');
   },
 
   resetDashboard() {
     customerDashboard.innerHTML = `
       <h2 class="welcome-message" id="informationDisplay">Welcome to your Dashboard!</h2>
+    `;
+  },
+
+  invalidDateMessage() {
+    dashboardCenterColumn.innerHTML = `
+      <p class="search-error-message">Please select a valid date for booking!</p>
     `;
   },
 
@@ -191,17 +270,6 @@ const domUpdates = {
     dashboardLeftColumn = document.getElementById('dashboardLeftColumn');
     dashboardCenterColumn = document.getElementById('dashboardCenterColumn');
     dashboardRightColumn = document.getElementById('dashboardRightColumn');
-  },
-
-  displayCenterWithBookingsButtons(bookingsData) {
-    let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    console.log(sortedBookingsData)
-    sortedBookingsData.forEach(booking => {
-      let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
-      let itinerary = determineBookingTime(booking);
-      let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
-      domUpdates.populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType);
-    });
   },
 
   populateCenterWithBookingsButtons(booking, bookedRoom, itinerary, roomType) {
@@ -222,118 +290,26 @@ const domUpdates = {
     `;
   },
 
-  displayCenterWithRoomsButtons(rooms) {
-    if (!rooms.length) {
-      domUpdates.populateApologyMessage();
-    } else {
-      domUpdates.populateCenterWithRoomButtons(rooms);
-    }
-  },
-
   populateApologyMessage() {
     dashboardCenterColumn.innerHTML = `
-      <h2>We are so, so, so, so, SO SORRY there are no rooms available for this date!</h2>
+      <p class="search-error-message">We are so, so, so, so, SO SORRY there are no rooms available for this date!</p>
     `;
   },
 
   populateCenterWithRoomButtons(rooms) {
     dashboardCenterColumn.innerHTML = '';
-      rooms.forEach(room => {
-        let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
-        dashboardCenterColumn.innerHTML += `
-          <button class="customer-small-room-info display-room scale-in heartbeat" id=${room.number}>
-            <section class="small-room-info display-room" id=${room.number}> 
-              <p class="display-room" id=${room.number}>Room ${room.number}</p>
-              <p class="display-room" id=${room.number}>${roomType}</p>
-              <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
-            </section>
-          </button>
-        `;
-      });
-  },
-
-  determineFilteringNewBookingsEvent(event) {
-    if (event.target.id === 'customerDateInputSubmitButton') {
-      domUpdates.filterByCalendarDateInput();
-    } else if (event.target.id === 'customerTypeInputSubmitButton') {
-      domUpdates.filterByRoomTypeInput();
-    } else if (event.target.id === 'customerClearInputSearchButton') {
-      domUpdates.clearRoomSearchFilters();
-    }
-  },
-
-  clearRoomSearchFilters() {
-    let customerDateInput = document.getElementById('customerDateInput');
-    customerDateInput.value = '';
-    hotel.availableRooms = [];
-    domUpdates.displayCenterWithRoomsButtons(hotel.rooms);
-    domUpdates.resetRightColumn();
-  },
-
-  determineColumnEvents(event) {
-    if (event.target.classList.contains('customer-date-search-button')) {
-      domUpdates.determineFilteringNewBookingsEvent(event);
-    } else if (event.target.classList.contains('display-booking')) {
-      let selectedBooking = hotel.bookings.find(booking => booking.roomNumber === parseInt(event.target.id));
-      domUpdates.populateRightColumnWithLargeDisplay(selectedBooking);
-    } else if (event.target.classList.contains('display-room')) {
-      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
-      domUpdates.populateRightColumnWithLargeDisplay(selectedRoom);
-    } else if (event.target.classList.contains('customer-book-room-button')) {
-      let selectedRoom = hotel.rooms.find(room => room.number === parseInt(event.target.id));
-      let customerDateInput = document.getElementById('customerDateInput');
-      let date = customerDateInput.value.replaceAll('-', '/');
-      completeCustomerBooking(date, selectedRoom.number, event);
-      domUpdates.resetRoomDisplayAfterBooking();
-    }
-  },
-
-  resetRoomDisplayAfterBooking() {
-    setTimeout(() => {
-      dashboardRightColumn.innerHTML = '';
-    }, 3000)
-  },
-
-  informCustomerOfBookedRoom(event) {
-    if (event.target.classList.contains('customer-book-room-button')) {
-      domUpdates.addClass([event.target], 'hidden');
-      let successMessage = document.getElementById('successfulBookingMessage');
-      successMessage.innerText = "Your room has been booked!";
-    }
-  },
-
-  filterByCalendarDateInput() {
-    hotel.availableRooms = [];
-    let customerDateInput = document.getElementById('customerDateInput');
-    let date = sortDate(customerDateInput.value.replaceAll('-', '/'));
-    let today = sortDate(getTodaysDate());
-    if (today <= date) {
-      hotel.filterAllAvailableRooms(customerDateInput.value.replaceAll('-', '/'));
-      domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
-      domUpdates.resetRightColumn();
-    } else {
-      domUpdates.invalidDateMessage();
-      customerDateInput.value = '';
-    }
-  },
-
-  invalidDateMessage() {
-    dashboardCenterColumn.innerHTML = `
-      <p>Please select a valid date for booking!</p>
-    `;
-  },
-
-  filterByRoomTypeInput() {
-    let customerRoomyTypeInput = document.getElementById('customerTypeInput');
-    let roomType = customerRoomyTypeInput.value.toLowerCase();
-    hotel.filterRoomByType(roomType);
-    domUpdates.displayCenterWithRoomsButtons(hotel.availableRooms);
-    domUpdates.resetRightColumn();
-    customerRoomyTypeInput.value = '';
-  },
-
-  resetRightColumn() {
-    dashboardRightColumn.innerHTML = '';
+    rooms.forEach(room => {
+      let roomType = room.roomType.charAt(0).toUpperCase() + room.roomType.slice(1);
+      dashboardCenterColumn.innerHTML += `
+        <button class="customer-small-room-info display-room scale-in heartbeat" id=${room.number}>
+          <section class="small-room-info display-room" id=${room.number}> 
+            <p class="display-room" id=${room.number}>Room ${room.number}</p>
+            <p class="display-room" id=${room.number}>${roomType}</p>
+            <p class="display-room" id=${room.number}>$${room.costPerNight}/night</p>
+          </section>
+        </button>
+      `;
+    });
   },
 
   populateLeftColumnWithCalendar() {
@@ -353,41 +329,17 @@ const domUpdates = {
       </div>
     `;
     let customerDateInput = document.getElementById('customerDateInput');
-    let customerTypeInput = document.getElementById('customerDateInput');
     domUpdates.setCalendarDate(customerDateInput);
-    domUpdates.createSearchEventListeners(customerDateInput, customerTypeInput);
-  },
-
-  createSearchEventListeners(customerDateInput, customerTypeInput) {
-    domUpdates.createCalendarEventListener(customerDateInput);
-    domUpdates.createRoomTypeInputEventListener(customerTypeInput);
-  },
-
-  createCalendarEventListener(customerDateInput) {
-    customerDateInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        domUpdates.filterByCalendarDateInput();
-      }
-    })
-  },
-
-  createRoomTypeInputEventListener(customerTypeInput) {
-    customerTypeInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        domUpdates.filterByRoomTypeInput();
-      }
-    })
-  },
-
-  setCalendarDate(customerDateInput) {
-    customerDateInput.min = getTodaysDate().replaceAll('/', '-');
   },
 
   populateRightColumnWithTotalCost() {
     let number = separator(hotel.currentCustomer.totalSpent);
     dashboardRightColumn.innerHTML = `
-      <h2 class="total-bill-headline">Your total bill for all bookings, past and present at the Overlook Hotel is:</h2>
-      <h3 class="total-bill-amount grow">$${number}</h3>
+      <div>
+        <h2 class="total-bill-headline">Your total bill for all your stays at</h2>
+        <h3 class="total-bill-headline">The Overlook Hotel:</h3>
+      </div>
+      <h4 class="total-bill-amount grow">$${number}</h4>
       <div>
         <p class="total-bill-message">Thank you for your patronage.</p>
         <p class="total-bill-message">We look forward to seeing you again soon!</p>
@@ -395,7 +347,7 @@ const domUpdates = {
     `;
   },
 
-  populateRightColumnWithChartHead(bookingsData) {  
+  populateCenterColumnWithChartHead(bookingsData) {  
     dashboardCenterColumn.innerHTML = `
       <table class="scrolling" tabindex="0"> 
         <caption>Booking Costs</caption>
@@ -414,15 +366,6 @@ const domUpdates = {
     domUpdates.displayTotalCostChart(bookingsData, totalCostTableBody);
   },
 
-  displayTotalCostChart(bookingsData, tableBody) {
-    let sortedBookingsData = bookingsData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    sortedBookingsData.forEach(booking => {
-      let bookedRoom = hotel.rooms.find(room => room.number === booking.roomNumber);
-      let roomType = bookedRoom.roomType.charAt(0).toUpperCase() + bookedRoom.roomType.slice(1);
-      domUpdates.populateTotalCostChart(tableBody, roomType, booking, bookedRoom);
-    });
-  },
-
   populateTotalCostChart(tableBody, roomType, booking, bookedRoom) {
     let newDate = sortDate(booking.date)
     tableBody.innerHTML += `
@@ -432,7 +375,44 @@ const domUpdates = {
         <td>$${bookedRoom.costPerNight}</td>
       </tr>
     `;
-  }
+  },
+
+  populateRightColumnWithBookingInfo(selection) {
+    let selectedRoom = hotel.rooms.find(room => room.number === selection.roomNumber);
+    let roomType = selectedRoom.roomType.charAt(0).toUpperCase() + selectedRoom.roomType.slice(1);
+    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selectedRoom.roomType)
+    dashboardRightColumn.innerHTML = `
+      <h2 class="customer-single-booking-title">Room ${selectedRoom.number}: ${roomType}</h2>
+      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
+      <section class="customer-single-booking-info">
+        <h3>Booking ID: ${selection.id.toUpperCase()}</h3>
+        <h3>Price: $${selectedRoom.costPerNight}/night</h3>
+      </section>
+    `;
+  },
+
+  populateRightColumnWithRoomInfo(selection, roomType, bedSize) {
+    let bidet = selection.bidet ? 'yes' : 'no';
+    let selectedPic = hotelPics.find(hotelObj => hotelObj.roomType === selection.roomType);
+    dashboardRightColumn.innerHTML = `
+      <h2 class="customer-single-booking-title">Room ${selection.number}: ${roomType}</h2>
+      <img class="room-image" src=${selectedPic.src} alt="${roomType} picture"/>
+      <section class="customer-single-booking-info">
+        <h3>Features: ${selection.numBeds}x ${bedSize}</h3>
+        <h3>Bidet: ${bidet}</h3>
+        <h3>Price: $${selection.costPerNight}/night</h3>
+      </section>
+      <section class="customer-single-booking-submit" id="singleBookingSubmitBox">
+      </section>
+    `;
+  },
+
+  populateBookingButton(element, selection) {
+    element.innerHTML = `
+      <button class="customer-book-room-button" id=${selection.number}>BOOK ROOM</button>
+      <p id="successfulBookingMessage"></p>
+    `;
+  },
 };
 
 const querySelectors = {

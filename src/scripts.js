@@ -16,7 +16,7 @@ let hotel;
 
 function completeCustomerBooking(date, roomNumber, event) {
   const booking = hotel.currentCustomer.createBooking(date, roomNumber);
-  postNewBooking(booking).then(data => {
+  postNewBooking(booking).then(() => {
     fetchData('bookings').then(data => {
       hotel.bookings = updateBookings(data)
       updateCustomer(date, event)
@@ -37,8 +37,8 @@ function updateBookings(data) {
 
 function getAllData() {
   return Promise.all([allRoomsData, allBookingsData, allCustomersData])
-  .then(data => loadAllData(data))
-  .catch(error => displayFetchErrorMessage(error));
+    .then(data => loadAllData(data))
+    .catch(error => displayFetchErrorMessage(error));
 }
 
 function getSingleCustomerData(userID) {
@@ -81,8 +81,8 @@ function checkForError(response) {
 function displayFetchErrorMessage(error) {
   let message;
   error.message === 'Failed to fetch' ?
-  message = 'Something went wrong. Please check your internet connection' :
-  message = error.message;
+    message = 'Something went wrong. Please check your internet connection' :
+    message = error.message;
   domUpdates.updateInnerText(querySelectors.customerDashboard, message);
 }
 
@@ -90,15 +90,15 @@ function validateUserCredentials() {
   let loginUsername = document.getElementById('loginUsername');
   let userID = getIDForCustomer(loginUsername);
   if (!validateUsername(loginUsername, userID) || !validatePassword(querySelectors.loginPassword)) {
-      domUpdates.invalidLoginMessage();
+    domUpdates.invalidLoginMessage();
   } else {
-      getAllData().then(data => {
-        domUpdates.showUserDashboard();
-        getSingleCustomerData(userID)
+    getAllData().then(() => {
+      domUpdates.showUserDashboard();
+      getSingleCustomerData(userID)
         .then(data => createNewSingleUser(data))
         .catch(error => displayFetchErrorMessage(error));
-      }).catch(error => displayFetchErrorMessage(error));
-    }
+    }).catch(error => displayFetchErrorMessage(error));
+  }
 }
 
 function getIDForCustomer(username) {
@@ -117,7 +117,7 @@ function validateUsername(usernameInput, id) {
 }
 
 function validatePassword(passwordInput) {
-  return passwordInput.value === 'overlook2022' ? true: false;
+  return passwordInput.value === 'overlook2022' ? true : false;
 }
 
 function determineUserTabEvent(event) {
