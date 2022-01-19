@@ -15,8 +15,13 @@
 }
 
 .customer-date-search-button {
-  @include height-width(25px, 100%);
+  @include height-width(50px, 100%);
   @include button-tabs($whiterum);
   font-size: 14px;
   color: $blackrum;
+}
+
+.search-error-message {
+  font-size: 28px;
+  text-align: center;
 }

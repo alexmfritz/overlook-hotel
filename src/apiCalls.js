@@ -3,7 +3,7 @@ import { checkForError } from './scripts';
 
 function fetchData(api) {
   return fetch(`http://localhost:3001/api/v1/${api}`)
-  .then(response => checkForError(response))
+    .then(response => checkForError(response))
 }
 
 const allCustomersData = fetchData('customers');
@@ -12,7 +12,7 @@ const allRoomsData = fetchData('rooms');
 
 function fetchSingleCustomer(id) {
   return fetch(`http://localhost:3001/api/v1/customers/${id}`)
-  .then(response => checkForError(response))
+    .then(response => checkForError(response))
 }
 
 function postNewBooking(bookingObj) {
@@ -23,7 +23,7 @@ function postNewBooking(bookingObj) {
       'Content-Type': 'application/json'
     }
   })
-  .then(response => checkForError(response))
+    .then(response => checkForError(response))
 }
 
 export { 
@@ -34,24 +34,3 @@ export {
   postNewBooking,
   fetchData
 };
-
-// export default fetchAllCustomer = () => {
-//   fetch('http://localhost:3001/api/v1/customers')
-//   .then(response => response.json())
-//   .then(data => data)
-//   .catch(error => console.log(error))
-// }
-
-// export default fetchAllRooms = () => {
-//   fetch('http://localhost:3001/api/v1/rooms')
-//   .then(response => response.json())
-//   .then(data => data)
-//   .catch(error => console.log(error));
-// }
-
-// export default fetchAllBookings = () => {
-//   fetch('http://localhost:3001/api/v1/bookings')
-//   .then(response => response.json())
-//   .then(data => data)
-//   .catch(error => console.log(error))
-// }

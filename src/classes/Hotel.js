@@ -8,11 +8,14 @@ export default class Hotel {
   }
 
   filterAllAvailableRooms(date) {
+    date = date.replaceAll('-', '/');
+    console.log(date)
     let alreadyBooked = this.bookings.filter(booking => booking.date === date);
     this.availableRooms = this.rooms.reduce((availableRooms, room) => {
       if (!alreadyBooked.find(booking => booking.roomNumber === room.number)) {
         availableRooms.push(room);
       }
+      console.log(availableRooms)
       return availableRooms;
     }, []);
   }
